@@ -39,4 +39,5 @@ This repository showcases my skills as an iOS developer through a podcast stream
 ## Contact
 
 Email: james.wolfe94@outlook.com
-LinkedIn: James Wolfe
+
+LinkedIn: [James Wolfe](https://www.linkedin.com/in/james-wolfe94/)
