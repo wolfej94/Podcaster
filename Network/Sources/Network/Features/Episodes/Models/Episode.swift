@@ -5,14 +5,16 @@
 //  Created by James Wolfe on 02/12/2024.
 //
 
-public struct Episode: Codable {
-    let id: String
-    let audio: String
-    let image: String
+import Foundation
+
+public struct Episode: Codable, Sendable, Identifiable, Equatable {
+    public let id: String
+    let audio: URL
+    let image: URL
     let title: String
-    let thumbnail: String
+    let thumbnail: URL
     let description: String
-    let pubDateMS: Int
+    let pubDateMS: Date
     let audioLengthSEC: Int
     let explicitContent: Bool
 

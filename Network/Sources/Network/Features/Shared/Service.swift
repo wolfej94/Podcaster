@@ -32,10 +32,7 @@ public class Service {
                 guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
                     throw URLError(.badServerResponse)
                 }
-                guard let data = data else {
-                    throw URLError(.cannotDecodeRawData)
-                }
-                let result = try decoder.decode(T.self, from: data)
+                let result = try decoder.decode(T.self, from: data ?? Data())
                 DispatchQueue.main.async {
                     completionHandler(.success(result))
                 }
@@ -58,6 +55,8 @@ public class Service {
                 return data
             }
             .decode(type: T.self, decoder: decoder)
+            .mapError { $0 }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 

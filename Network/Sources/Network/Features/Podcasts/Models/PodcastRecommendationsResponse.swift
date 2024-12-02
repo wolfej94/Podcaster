@@ -5,6 +5,6 @@
 //  Created by James Wolfe on 01/12/2024.
 //
 
-struct PodcastRecommendationsResponse: Decodable {
+internal struct PodcastRecommendationsResponse: Codable {
     let recommendations: [Podcast]
 }

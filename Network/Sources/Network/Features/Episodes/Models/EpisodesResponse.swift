@@ -5,6 +5,6 @@
 //  Created by James Wolfe on 02/12/2024.
 //
 
-struct EpisodesResponse: Decodable {
+internal struct EpisodesResponse: Codable {
     let episodes: [Episode]
 }

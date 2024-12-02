@@ -73,21 +73,21 @@ protocol PodcastService {
     /// Fetches a paginated list of popular podcasts as a Combine publisher.
     /// - Parameter page: The page number for paginated results.
     /// - Returns: A publisher emitting an array of `Podcast` objects or an error.
-    func popular(page: Int) -> AnyPublisher<[Podcast], Error>
+    func popularPublisher(page: Int) -> AnyPublisher<[Podcast], Error>
 
     /// Fetches a paginated list of podcasts recommended based on a specific podcast as a Combine publisher.
     /// - Parameters:
     ///   - basedOn: The `Podcast` to base recommendations on.
     ///   - page: The page number for paginated results.
     /// - Returns: A publisher emitting an array of `Podcast` objects or an error.
-    func recommended(basedOn: Podcast, page: Int) -> AnyPublisher<[Podcast], Error>
+    func recommendedPublisher(basedOn: Podcast, page: Int) -> AnyPublisher<[Podcast], Error>
 
     /// Searches for podcasts based on a query string as a Combine publisher, with pagination.
     /// - Parameters:
     ///   - query: The search query.
     ///   - page: The page number for paginated results.
     /// - Returns: A publisher emitting an array of `Podcast` objects or an error.
-    func search(query: String, page: Int) -> AnyPublisher<[Podcast], Error>
+    func searchPublisher(query: String, page: Int) -> AnyPublisher<[Podcast], Error>
 }
 
 public final class DefaultPodcastService: Service, PodcastService {
@@ -154,7 +154,7 @@ public extension DefaultPodcastService {
 // MARK: - Combine Publisher Methods
 public extension DefaultPodcastService {
 
-    func popular(page: Int) -> AnyPublisher<[Podcast], any Error> {
+    func popularPublisher(page: Int) -> AnyPublisher<[Podcast], any Error> {
         let api: PodcastAPI = .popular(page: page, apiKey: apiKey)
         let publisher: AnyPublisher<PopularPodcastsResponse, any Error> = request(api.request, usingSession: session)
         return publisher
@@ -162,7 +162,7 @@ public extension DefaultPodcastService {
             .eraseToAnyPublisher()
     }
 
-    func recommended(basedOn: Podcast, page: Int) -> AnyPublisher<[Podcast], any Error> {
+    func recommendedPublisher(basedOn: Podcast, page: Int) -> AnyPublisher<[Podcast], any Error> {
         let api: PodcastAPI = .recommended(basedOn: basedOn, page: page, apiKey: apiKey)
         let publisher: AnyPublisher<PodcastRecommendationsResponse, any Error> = request(api.request, usingSession: session)
         return publisher
@@ -170,7 +170,7 @@ public extension DefaultPodcastService {
             .eraseToAnyPublisher()
     }
 
-    func search(query: String, page: Int) -> AnyPublisher<[Podcast], any Error> {
+    func searchPublisher(query: String, page: Int) -> AnyPublisher<[Podcast], any Error> {
         let api: PodcastAPI = .search(query: query, page: page, apiKey: apiKey)
         let publisher: AnyPublisher<PodcastSearchResponse, any Error> = request(api.request, usingSession: session)
         return publisher

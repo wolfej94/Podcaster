@@ -24,6 +24,7 @@ class MockURLProtocol: URLProtocol {
     override func startLoading() {
         if let error = Self.error {
             client?.urlProtocol(self, didFailWithError: error)
+            return
         }
 
         if let response = Self.response {

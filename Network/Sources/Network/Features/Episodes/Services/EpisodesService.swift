@@ -27,7 +27,7 @@ public protocol EpisodesService {
     /// Method to fetch episodes for a given podcast using Combine's `AnyPublisher`.
     /// - Parameter podcast: The `Podcast` object for which to fetch the episodes.
     /// - Returns: A `Publisher` that emits either an array of `Episode` objects if successful, or an error if the request fails.
-    func episodes(forPodcast podcast: Podcast) -> AnyPublisher<[Episode], Error>
+    func episodesPublisher(forPodcast podcast: Podcast) -> AnyPublisher<[Episode], Error>
 }
 
 public final class DefaultEpisodesService: Service, EpisodesService {
@@ -45,7 +45,8 @@ public final class DefaultEpisodesService: Service, EpisodesService {
 public extension DefaultEpisodesService {
     func episodes(forPodcast podcast: Podcast) async throws -> [Episode] {
         let api: EpisodeAPI = .episodes(podcast: podcast, apiKey: apiKey)
-        return try await request(api.request, usingSession: session)
+        let response: EpisodesResponse = try await request(api.request, usingSession: session)
+        return response.episodes
     }
 }
 
@@ -61,7 +62,7 @@ public extension DefaultEpisodesService {
 
 // MARK: - Combine Publisher Methods
 public extension DefaultEpisodesService {
-    func episodes(forPodcast podcast: Podcast) -> AnyPublisher<[Episode], any Error> {
+    func episodesPublisher(forPodcast podcast: Podcast) -> AnyPublisher<[Episode], any Error> {
         let api: EpisodeAPI = .episodes(podcast: podcast, apiKey: apiKey)
         let publisher: AnyPublisher<EpisodesResponse, any Error> = request(api.request, usingSession: session)
         return publisher
