@@ -21,6 +21,8 @@ A podcast streaming app showcasing iOS development skills. Includes reusable pac
    ./ConfigurationSync
    ```
    This command syncs the configuration files into the app, which contain sensitive information like API keys. These files are not included in the public repository for security reasons.
+
+
    _note that you will need access to my private configuration repository_
 
 ## Architecture
