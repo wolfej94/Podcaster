@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol API {
+internal protocol API {
     var request: URLRequest { get }
 }

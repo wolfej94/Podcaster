@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum EpisodeAPI: API {
+internal enum EpisodeAPI: API {
 
     case episodes(podcast: Podcast, apiKey: String)
 

@@ -38,7 +38,7 @@ final class EpisodesServiceTests {
 // MARK: - Async/Await Methods
 extension EpisodesServiceTests {
     @Test("Test async episodes fails when network request throws",
-          .tags(Tag.PodcastServiceTestTag.async))
+          .tags(Tag.EpisodeServiceTestTag.async))
     func asyncEpisodesFailsWhenNetworkRequestThrows() async throws {
         session.errorToThrow = URLError(.unknown)
         do {
@@ -50,7 +50,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test async episode fails when decoding fails",
-          .tags(Tag.PodcastServiceTestTag.async))
+          .tags(Tag.EpisodeServiceTestTag.async))
     func asyncEpisodesFailsWhenDecodingFails() async throws {
         session.dataToReceive = TestData.invalidEpisodesData
         session.responseToReceive = TestData.successfulEpisodesResponse
@@ -68,7 +68,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test async episodes fails when response code is not success",
-          .tags(Tag.PodcastServiceTestTag.async))
+          .tags(Tag.EpisodeServiceTestTag.async))
     func asyncEpisodesFailsWhenResponseCodeIsNotSuccess() async throws {
         session.dataToReceive = Data()
         session.responseToReceive = TestData.failedEpisodesResponse
@@ -86,7 +86,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test async episodes succeeds when data is valid and response is success",
-          .tags(Tag.PodcastServiceTestTag.async))
+          .tags(Tag.EpisodeServiceTestTag.async))
     func asyncEpisodesSucceedsWhenDataIsValidAndResponseIsSuccess() async throws {
         session.dataToReceive = TestData.validEpisodesData
         session.responseToReceive = TestData.successfulEpisodesResponse
@@ -102,7 +102,7 @@ extension EpisodesServiceTests {
 // MARK: - Closure Methods
 extension EpisodesServiceTests {
     @Test("Test closure episodes fails when network request throws",
-          .tags(Tag.PodcastServiceTestTag.closure))
+          .tags(Tag.EpisodeServiceTestTag.closure))
     func closureEpisodesFailsWhenNetworkRequestThrows() async throws {
         session.errorToThrow = URLError(.unknown)
         do {
@@ -118,7 +118,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test closure episode fails when decoding fails",
-          .tags(Tag.PodcastServiceTestTag.closure))
+          .tags(Tag.EpisodeServiceTestTag.closure))
     func closureEpisodesFailsWhenDecodingFails() async throws {
         session.dataToReceive = TestData.invalidEpisodesData
         session.responseToReceive = TestData.successfulEpisodesResponse
@@ -140,7 +140,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test closure episodes fails when response code is not success",
-          .tags(Tag.PodcastServiceTestTag.closure))
+          .tags(Tag.EpisodeServiceTestTag.closure))
     func closureEpisodesFailsWhenResponseCodeIsNotSuccess() async throws {
         session.dataToReceive = Data()
         session.responseToReceive = TestData.failedEpisodesResponse
@@ -162,7 +162,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test closure episodes succeeds when data is valid and response is success",
-          .tags(Tag.PodcastServiceTestTag.closure))
+          .tags(Tag.EpisodeServiceTestTag.closure))
     func closureEpisodesSucceedsWhenDataIsValidAndResponseIsSuccess() async throws {
         session.dataToReceive = TestData.validEpisodesData
         session.responseToReceive = TestData.successfulEpisodesResponse
@@ -182,7 +182,7 @@ extension EpisodesServiceTests {
 // MARK: - Combine Methods
 extension EpisodesServiceTests {
     @Test("Test combine episodes fails when network request throws",
-          .tags(Tag.PodcastServiceTestTag.combine))
+          .tags(Tag.EpisodeServiceTestTag.combine))
     func combineEpisodesFailsWhenNetworkRequestThrows() async throws {
         session.errorToThrow = URLError(.unknown)
         do {
@@ -204,7 +204,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test combine episode fails when decoding fails",
-          .tags(Tag.PodcastServiceTestTag.combine))
+          .tags(Tag.EpisodeServiceTestTag.combine))
     func combineEpisodesFailsWhenDecodingFails() async throws {
         session.dataToReceive = TestData.invalidEpisodesData
         session.responseToReceive = TestData.successfulEpisodesResponse
@@ -232,7 +232,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test combine episodes fails when response code is not success",
-          .tags(Tag.PodcastServiceTestTag.combine))
+          .tags(Tag.EpisodeServiceTestTag.combine))
     func combineEpisodesFailsWhenResponseCodeIsNotSuccess() async throws {
         session.dataToReceive = Data()
         session.responseToReceive = TestData.failedEpisodesResponse
@@ -260,7 +260,7 @@ extension EpisodesServiceTests {
     }
 
     @Test("Test combine episodes succeeds when data is valid and response is success",
-          .tags(Tag.PodcastServiceTestTag.combine))
+          .tags(Tag.EpisodeServiceTestTag.combine))
     func combineEpisodesSucceedsWhenDataIsValidAndResponseIsSuccess() async throws {
         session.dataToReceive = TestData.validEpisodesData
         session.responseToReceive = TestData.successfulEpisodesResponse

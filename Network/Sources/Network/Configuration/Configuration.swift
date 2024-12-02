@@ -7,6 +7,6 @@
 
 import Foundation
 
-final class Configuration {
+internal final class Configuration {
     static let baseURL = URL(string: "https://listen-api.listennotes.com/api/v2/")!
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PodcastAPI: API {
+internal enum PodcastAPI: API {
 
     case popular(page: Int, apiKey: String)
     case search(query: String, page: Int, apiKey: String)
