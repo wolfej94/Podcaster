@@ -9,7 +9,7 @@ public final class Storage {
     private let backgroundContext: NSManagedObjectContext
 
     public init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "MVVM_C")
+        container = NSPersistentContainer(name: "Storage")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
@@ -23,14 +23,14 @@ public final class Storage {
         backgroundContext.automaticallyMergesChangesFromParent = true
     }
 
-    public func create<T: StorageObject>(_ objects: [T]) async throws {
+    public func create(_ podcasts: [Podcast]) async throws {
         try await withCheckedThrowingContinuation { continuation in
             backgroundContext.performAndWait {
                 do {
-                    let values = try objects.reduce(into: [[String: Any]]()) { result, object in
+                    let values = try podcasts.reduce(into: [[String: Any]]()) { result, object in
                         result = try result + [object.toDictionary()]
                     }
-                    let batchInsertRequest = NSBatchInsertRequest(entityName: T.manageObjectType.entity().name ?? "", objects: values)
+                    let batchInsertRequest = NSBatchInsertRequest(entityName: "PodcastStorageObject", objects: values)
                     try backgroundContext.execute(batchInsertRequest)
                     continuation.resume(returning: ())
                 } catch {
@@ -40,23 +40,27 @@ public final class Storage {
         }
     }
 
-    public func read<T: StorageObject>(predicate: NSPredicate? = nil, sortBy: [NSSortDescriptor]? = nil) throws -> [T] {
-        let entityType = T.manageObjectType.entity().name ?? ""
-        let fetchRequest = NSFetchRequest<T.manageObjectType>(entityName: entityType)
+    public func read(predicate: NSPredicate? = nil, sortBy: [NSSortDescriptor]? = nil) throws -> [Podcast] {
+        let fetchRequest = NSFetchRequest<PodcastStorageObject>(entityName: "PodcastStorageObject")
         fetchRequest.predicate = predicate
         fetchRequest.sortDescriptors = sortBy
         return try container.viewContext
             .fetch(fetchRequest)
             .map {
-                T.init(from: $0)
+                Podcast(from: $0)
             }
     }
 
-    public func delete(_ objects: [any StorageObject]) async throws {
+    public func delete(_ objects: [Podcast]) async throws {
+        let managedObjectIDs = try objects.compactMap {
+            let fetchRequest = NSFetchRequest<PodcastStorageObject>(entityName: "PodcastStorageObject")
+            fetchRequest.predicate = NSPredicate(format: "id = %@", $0.id)
+            return try container.viewContext.fetch(fetchRequest).first?.objectID
+        }
         return try await withCheckedThrowingContinuation { continuation in
             backgroundContext.performAndWait {
                 do {
-                    let batchInsertRequest = NSBatchDeleteRequest(objectIDs: objects.compactMap(\.managedObjectId))
+                    let batchInsertRequest = NSBatchDeleteRequest(objectIDs: managedObjectIDs)
                     try backgroundContext.execute(batchInsertRequest)
                 } catch {
                     continuation.resume(throwing: error)

@@ -9,8 +9,6 @@ import Foundation
 import CoreData
 
 public struct Podcast: StorageObject {
-    
-    public typealias manageObjectType = PodcastStorageObject
 
     public func toDictionary() throws -> [String : Any] {
         let encoder = JSONEncoder()
@@ -21,7 +19,6 @@ public struct Podcast: StorageObject {
         return dictionary
     }
 
-    public var managedObjectId: NSManagedObjectID?
     public let id: String
     let email: String
     let image: URL?
@@ -64,8 +61,7 @@ public struct Podcast: StorageObject {
         case listenScoreGlobalRank = "listen_score_global_rank"
     }
 
-    public init(from: PodcastStorageObject) {
-        managedObjectId = from.objectID
+    internal init(from: PodcastStorageObject) {
         id = from.id ?? ""
         email = from.email ?? ""
         image = from.image

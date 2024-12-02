@@ -14,7 +14,4 @@ enum StorageObjectError: LocalizedError {
 public protocol StorageObject: Encodable, Identifiable, Equatable, Sendable {
     var id: String { get }
     func toDictionary() throws -> [String: Any]
-    associatedtype manageObjectType: NSManagedObject
-    var managedObjectId: NSManagedObjectID? { get }
-    init(from: manageObjectType)
 }
