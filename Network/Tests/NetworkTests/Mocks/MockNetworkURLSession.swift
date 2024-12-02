@@ -35,6 +35,12 @@ final class MockNetworkURLSession: NetworkURLSession, @unchecked Sendable {
         }
     }
 
+    init() {
+        responseToReceive = nil
+        dataToReceive = nil
+        errorToThrow = nil
+    }
+
     private var session: URLSession {
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]

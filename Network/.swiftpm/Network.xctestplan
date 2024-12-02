@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "EF9B7A34-FE7E-4BEE-8416-705F4B0A7F2C",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NetworkTests",
+        "name" : "NetworkTests"
+      }
+    }
+  ],
+  "version" : 1
+}
