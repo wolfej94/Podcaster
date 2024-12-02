@@ -10,21 +10,21 @@ import Foundation
 public struct Podcast: Codable, Sendable, Identifiable, Equatable {
     public let id: String
     let email: String
-    let image: URL
+    let image: URL?
     let title: String
     let country: String
-    let website: URL
+    let website: URL?
     let language: String
     let genreIDS: [Int]
     let publisher: String
-    let thumbnail: URL
-    let description: String
+    let thumbnail: URL?
+    let summary: String
     let listenScore: Int
     let totalEpisodes: Int
     let explicitContent: Bool
     let latestEpisodeID: String
-    let latestPubDateMS: Date
-    let earliestPubDateMS: Date
+    let latestPubDateMS: Date?
+    let earliestPubDateMS: Date?
     let updateFrequencyHours: Int
     let listenScoreGlobalRank: String
 
@@ -39,7 +39,7 @@ public struct Podcast: Codable, Sendable, Identifiable, Equatable {
         case genreIDS = "genre_ids"
         case publisher
         case thumbnail
-        case description
+        case summary = "description"
         case listenScore = "listen_score"
         case totalEpisodes = "total_episodes"
         case explicitContent = "explicit_content"
