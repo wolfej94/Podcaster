@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24B83" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="EpisodeStorageObject" representedClassName="EpisodeStorageObject" syncable="YES" codeGenerationType="class">
+        <attribute name="audio" optional="YES" attributeType="URI"/>
+        <attribute name="audioLengthSEC" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="explicitContent" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="URI"/>
+        <attribute name="pubDateMS" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="summary" optional="YES" attributeType="String"/>
+        <attribute name="thumbnail" optional="YES" attributeType="URI"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PodcastStorageObject" inverseName="episodes" inverseEntity="PodcastStorageObject"/>
+    </entity>
     <entity name="GenreStorageObject" representedClassName="GenreStorageObject" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GenreStorageObject" inverseName="podcast" inverseEntity="GenreStorageObject"/>
     </entity>
     <entity name="PodcastStorageObject" representedClassName="PodcastStorageObject" syncable="YES" codeGenerationType="class">
         <attribute name="country" attributeType="String"/>
@@ -22,6 +35,7 @@
         <attribute name="totalEpisodes" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="updateFrequencyHours" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="website" attributeType="URI"/>
+        <relationship name="episodes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EpisodeStorageObject" inverseName="podcast" inverseEntity="EpisodeStorageObject"/>
         <relationship name="genres" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenreStorageObject"/>
         <uniquenessConstraints>
             <uniquenessConstraint>

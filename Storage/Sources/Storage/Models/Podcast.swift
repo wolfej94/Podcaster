@@ -26,7 +26,7 @@ public struct Podcast: StorageObject {
     let country: String
     let website: URL?
     let language: String
-    let genreIDS: [Int]
+    let genres: [Genre]
     let publisher: String
     let thumbnail: URL?
     let summary: String
@@ -47,7 +47,7 @@ public struct Podcast: StorageObject {
         case country
         case website
         case language
-        case genreIDS = "genre_ids"
+        case genres
         case publisher
         case thumbnail
         case summary
@@ -69,11 +69,8 @@ public struct Podcast: StorageObject {
         country = from.country ?? ""
         website = from.website
         language = from.language ?? ""
-        if let genres = from.genres?.allObjects as? [GenreStorageObject] {
-            genreIDS = genres.map { Int($0.id) }
-        } else {
-            genreIDS = []
-        }
+        genres = (from.genres?.allObjects as? [GenreStorageObject])?
+            .map { Genre(id: Int($0.id)) } ?? []
         publisher = from.publisher ?? ""
         thumbnail = from.thumbnail
         summary = from.summary ?? ""

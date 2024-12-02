@@ -13,7 +13,7 @@ public struct Episode: Codable, Sendable, Identifiable, Equatable {
     let image: URL
     let title: String
     let thumbnail: URL
-    let description: String
+    let summary: String
     let pubDateMS: Date
     let audioLengthSEC: Int
     let explicitContent: Bool
@@ -24,7 +24,7 @@ public struct Episode: Codable, Sendable, Identifiable, Equatable {
         case image
         case title
         case thumbnail
-        case description
+        case summary = "description"
         case pubDateMS = "pub_date_ms"
         case audioLengthSEC = "audio_length_sec"
         case explicitContent = "explicit_content"
