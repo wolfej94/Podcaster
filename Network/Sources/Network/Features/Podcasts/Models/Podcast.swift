@@ -5,24 +5,26 @@
 //  Created by James Wolfe on 01/12/2024.
 //
 
-public struct Podcast: Codable {
-    let id: String
+import Foundation
+
+public struct Podcast: Codable, Sendable, Identifiable, Equatable {
+    public let id: String
     let email: String
-    let image: String
+    let image: URL
     let title: String
     let country: String
-    let website: String
+    let website: URL
     let language: String
     let genreIDS: [Int]
     let publisher: String
-    let thumbnail: String
+    let thumbnail: URL
     let description: String
     let listenScore: Int
     let totalEpisodes: Int
     let explicitContent: Bool
     let latestEpisodeID: String
-    let latestPubDateMS: Int
-    let earliestPubDateMS: Int
+    let latestPubDateMS: Date
+    let earliestPubDateMS: Date
     let updateFrequencyHours: Int
     let listenScoreGlobalRank: String
 
@@ -47,4 +49,5 @@ public struct Podcast: Codable {
         case updateFrequencyHours = "update_frequency_hours"
         case listenScoreGlobalRank = "listen_score_global_rank"
     }
+
 }

@@ -17,18 +17,25 @@ class MockURLProtocol: URLProtocol {
         return true
     }
 
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        request
+    }
+
     override func startLoading() {
         if let error = Self.error {
             client?.urlProtocol(self, didFailWithError: error)
         }
 
-        if var response = Self.response {
+        if let response = Self.response {
             client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         }
 
-        if var data = Self.data {
+        if let data = Self.data {
             client?.urlProtocol(self, didLoad: data)
         }
+
         client?.urlProtocolDidFinishLoading(self)
     }
+
+    override func stopLoading() { }
 }

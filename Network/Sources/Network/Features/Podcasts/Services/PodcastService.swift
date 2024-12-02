@@ -107,17 +107,20 @@ public extension DefaultPodcastService {
 
     func popular(page: Int) async throws -> [Podcast] {
         let api: PodcastAPI = .popular(page: page, apiKey: apiKey)
-        return try await request(api.request, usingSession: session)
+        let response: PopularPodcastsResponse = try await request(api.request, usingSession: session)
+        return response.podcasts
     }
 
     func recommended(basedOn: Podcast, page: Int) async throws -> [Podcast] {
         let api: PodcastAPI = .recommended(basedOn: basedOn, page: page, apiKey: apiKey)
-        return try await request(api.request, usingSession: session)
+        let response: PodcastRecommendationsResponse = try await request(api.request, usingSession: session)
+        return response.recommendations
     }
 
     func search(query: String, page: Int) async throws -> [Podcast] {
         let api: PodcastAPI = .search(query: query, page: page, apiKey: apiKey)
-        return try await request(api.request, usingSession: session)
+        let response: PodcastSearchResponse = try await request(api.request, usingSession: session)
+        return response.results
     }
 
 }

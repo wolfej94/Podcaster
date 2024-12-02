@@ -11,7 +11,7 @@ import Foundation
 
 final class MockNetworkURLSession: NetworkURLSession, @unchecked Sendable {
 
-    var data: Data? {
+    var dataToReceive: Data? {
         set {
             MockURLProtocol.data = newValue
         } get {
@@ -19,7 +19,7 @@ final class MockNetworkURLSession: NetworkURLSession, @unchecked Sendable {
         }
     }
 
-    var response: URLResponse? {
+    var responseToReceive: URLResponse? {
         set {
             MockURLProtocol.response = newValue
         } get {
@@ -27,7 +27,7 @@ final class MockNetworkURLSession: NetworkURLSession, @unchecked Sendable {
         }
     }
 
-    var error: Error? {
+    var errorToThrow: Error? {
         set {
             MockURLProtocol.error = newValue
         } get {
@@ -37,7 +37,7 @@ final class MockNetworkURLSession: NetworkURLSession, @unchecked Sendable {
 
     private var session: URLSession {
         let configuration = URLSessionConfiguration.default
-        URLProtocol.registerClass(MockURLProtocol.self)
+        configuration.protocolClasses = [MockURLProtocol.self]
         return URLSession(configuration: configuration)
     }
 
