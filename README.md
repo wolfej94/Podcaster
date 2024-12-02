@@ -1,43 +1,44 @@
-# PodcastAppPortfolio
+# Podcaster
 
-## Overview
-This repository showcases my skills as an iOS developer through a podcast streaming app. It features reusable components and demonstrates diverse architectural patterns in both SwiftUI and UIKit.
+A podcast streaming app showcasing iOS development skills. Includes reusable packages for network requests and storage using Swift Concurrency, Combine, and Closures. Features four projects demonstrating SwiftUI (MVVM, MVVM-C) and UIKit (MVC, VIPER) architectures. Fully tested with XCTest and Swift Testing.
+
+## Requirements
+
+- Xcode 16.1+
+- Swift 6.0+
+
+## Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/wolfej94/Podcaster.git
+   cd Podcaster
+   ```
+
+2. **Run Configuration Sync**:
+   To populate the configuration files with API keys and other sensitive information, run the following command in the terminal:
+   ```bash
+   ./ConfigurationSync
+   ```
+   This command syncs the configuration files into the app, which contain sensitive information like API keys. These files are not included in the public repository for security reasons.
+   _note that you will need access to my private configuration repository_
+
+## Architecture
+
+The app demonstrates the following architectural patterns:
+
+- **MVVM** (Model-View-ViewModel)
+- **MVVM-C** (Model-View-ViewModel-Coordinator)
+- **MVC** (Model-View-Controller)
+- **VIPER** (View-Interactor-Presenter-Entity-Router)
 
 ## Features
 
-1. **Reusable Packages:**
-   - **Network Requests** and **Storage** modules.
-   - Implemented with three approaches: **Swift Concurrency**, **Combine**, and **Closures**.
+- SwiftUI-based user interfaces
+- UIKit-based user interfaces
+- Network requests using Swift Concurrency and Combine
+- Unit and UI tests with XCTest
 
-2. **Four Projects:**
-   - **SwiftUI Projects:**
-     - MVVM (Model-View-ViewModel)
-     - MVVM-C (Model-View-ViewModel-Coordinator)
-   - **UIKit Projects:**
-     - MVC (Model-View-Controller)
-     - VIPER (View-Interactor-Presenter-Entity-Router)
+## License
 
-3. **Testing:**
-   - Fully tested using **XCTest** and **Swift Testing** frameworks.
-
-## Technologies Used
-
-- **Language:** Swift
-- **UI Frameworks:** SwiftUI, UIKit
-- **Architectures:** MVVM, MVVM-C, MVC, VIPER
-- **Asynchronous Programming:** Swift Concurrency, Combine
-- **Testing:** XCTest, Swift Testing
-
-## How to Use
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/wolfej94/postcaster.git
-2. Open in Xcode Open the .xcworkspace file in Xcode.
-3. Run a Project Navigate to the Projects folder, select a specific project (e.g., MVVM or VIPER), and build/run it on your simulator or device.
-
-## Contact
-
-Email: james.wolfe94@outlook.com
-
-LinkedIn: [James Wolfe](https://www.linkedin.com/in/james-wolfe94/)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
