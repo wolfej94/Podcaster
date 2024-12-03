@@ -11,7 +11,7 @@ enum StorageObjectError: LocalizedError {
     case serialisationFailed
 }
 
-public protocol StorageObject: Codable, Identifiable, Equatable, Sendable {
+public protocol StorageObject: Encodable, Identifiable, Equatable, Sendable {
     var id: String { get }
     func toDictionary() throws -> [String: Any]
 }

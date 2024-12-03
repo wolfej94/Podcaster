@@ -294,7 +294,7 @@ extension EpisodesServiceTests {
             image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
             title: "Title",
             country: "Country",
-            website: URL(string: "https://google.com")!,
+            website: URL(string: "https://example.com")!,
             language: "ENG",
             genreIDS: [1],
             publisher: "Test Publisher",
@@ -311,7 +311,7 @@ extension EpisodesServiceTests {
         )
         static let episode = Episode(
             id: "456",
-            audio: URL(string: "https://google.com")!,
+            audio: URL(string: "https://example.com")!,
             image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
             title: "Title",
             thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,

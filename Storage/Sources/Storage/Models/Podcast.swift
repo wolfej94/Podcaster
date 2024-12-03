@@ -10,15 +10,6 @@ import CoreData
 
 public struct Podcast: StorageObject {
 
-    public func toDictionary() throws -> [String : Any] {
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(self)
-        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            throw StorageObjectError.serialisationFailed
-        }
-        return dictionary
-    }
-
     public let id: String
     let email: String
     let image: URL?
@@ -82,6 +73,37 @@ public struct Podcast: StorageObject {
         earliestPubDateMS = from.earliestPubDateMS
         updateFrequencyHours = Int(from.updateFrequencyHours)
         listenScoreGlobalRank = from.listenScoreGlobalRank ?? ""
+    }
+
+    public init(id: String, email: String, image: URL?, title: String, country: String, website: URL?, language: String, genres: [Genre], publisher: String, thumbnail: URL?, summary: String, listenScore: Int, totalEpisodes: Int, explicitContent: Bool, latestEpisodeID: String, latestPubDateMS: Date?, earliestPubDateMS: Date?, updateFrequencyHours: Int, listenScoreGlobalRank: String) {
+        self.id = id
+        self.email = email
+        self.image = image
+        self.title = title
+        self.country = country
+        self.website = website
+        self.language = language
+        self.genres = genres
+        self.publisher = publisher
+        self.thumbnail = thumbnail
+        self.summary = summary
+        self.listenScore = listenScore
+        self.totalEpisodes = totalEpisodes
+        self.explicitContent = explicitContent
+        self.latestEpisodeID = latestEpisodeID
+        self.latestPubDateMS = latestPubDateMS
+        self.earliestPubDateMS = earliestPubDateMS
+        self.updateFrequencyHours = updateFrequencyHours
+        self.listenScoreGlobalRank = listenScoreGlobalRank
+    }
+
+    public func toDictionary() throws -> [String : Any] {
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw StorageObjectError.serialisationFailed
+        }
+        return dictionary
     }
 
 }

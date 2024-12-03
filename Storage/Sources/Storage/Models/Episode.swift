@@ -11,15 +11,6 @@ import CoreData
 
 public struct Episode: StorageObject {
 
-    public func toDictionary() throws -> [String : Any] {
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(self)
-        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            throw StorageObjectError.serialisationFailed
-        }
-        return dictionary
-    }
-
     public let id: String
     let audio: URL?
     let image: URL?
@@ -52,6 +43,27 @@ public struct Episode: StorageObject {
         pubDateMS = from.pubDateMS
         audioLengthSEC = Int(from.audioLengthSEC)
         explicitContent = from.explicitContent
+    }
+
+    public init(id: String, audio: URL?, image: URL?, title: String, thumbnail: URL?, summary: String, pubDateMS: Date?, audioLengthSEC: Int, explicitContent: Bool) {
+        self.id = id
+        self.audio = audio
+        self.image = image
+        self.title = title
+        self.thumbnail = thumbnail
+        self.summary = summary
+        self.pubDateMS = pubDateMS
+        self.audioLengthSEC = audioLengthSEC
+        self.explicitContent = explicitContent
+    }
+
+    public func toDictionary() throws -> [String : Any] {
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw StorageObjectError.serialisationFailed
+        }
+        return dictionary
     }
 
 }

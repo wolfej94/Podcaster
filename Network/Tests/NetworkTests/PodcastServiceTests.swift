@@ -781,7 +781,7 @@ extension PodcastServiceTests {
             image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
             title: "Title",
             country: "Country",
-            website: URL(string: "https://google.com")!,
+            website: URL(string: "https://example.com")!,
             language: "ENG",
             genreIDS: [1],
             publisher: "Test Publisher",
