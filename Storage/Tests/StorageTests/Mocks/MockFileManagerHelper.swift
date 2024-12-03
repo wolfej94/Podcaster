@@ -26,6 +26,7 @@ final class MockFileManagerHelper: FileManagerHelper {
     func downloadFile(at networkURL: URL?, session: any Storage.NetworkURLSession, completionHandler: @escaping @Sendable (Result<URL, any Error>) -> Void) {
         if let errorToThrowForDownloadFile {
             completionHandler(.failure(errorToThrowForDownloadFile))
+            return
         }
         completionHandler(.success(urlToReturnFromDownloadFile))
     }

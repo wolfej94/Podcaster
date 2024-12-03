@@ -33,6 +33,37 @@ internal class PodcastStorageObject: NSManagedObject {
     @NSManaged public var episodes: NSSet?
     @NSManaged public var genres: NSSet?
 
+    /// To be used for testing only
+    internal convenience init(podcast: Podcast, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.country = podcast.country
+        self.earliestPubDateMS = podcast.earliestPubDateMS
+        self.email = podcast.email
+        self.explicitContent = podcast.explicitContent
+        self.id = podcast.id
+        self.image = podcast.image
+        self.language = podcast.language
+        self.latestEpisodeID = podcast.latestEpisodeID
+        self.latestPubDateMS = podcast.latestPubDateMS
+        self.listenScore = Int16(podcast.listenScore)
+        self.listenScoreGlobalRank = podcast.listenScoreGlobalRank
+        self.publisher = podcast.publisher
+        self.summary = podcast.summary
+        self.thumbnail = podcast.thumbnail
+        self.title = podcast.title
+        self.totalEpisodes = Int16(podcast.totalEpisodes)
+        self.updateFrequencyHours = Int16(podcast.updateFrequencyHours)
+        self.website = podcast.website
+        self.episodes = NSSet(array: podcast.episodes
+            .map {
+                EpisodeStorageObject(episode: $0, context: context)
+            })
+        self.genres = NSSet(array: podcast.genres
+            .map {
+                GenreStorageObject(genre: $0, context: context)
+            })
+    }
+
 }
 
 // MARK: Generated accessors for episodes

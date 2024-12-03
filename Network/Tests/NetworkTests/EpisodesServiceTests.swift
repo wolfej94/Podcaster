@@ -76,12 +76,7 @@ extension EpisodesServiceTests {
             _ = try await subject.episodes(forPodcast: TestData.podcast)
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -152,12 +147,7 @@ extension EpisodesServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -299,7 +289,7 @@ extension EpisodesServiceTests {
             genreIDS: [1],
             publisher: "Test Publisher",
             thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-            description: "Test Description",
+            summary: "Test Description",
             listenScore: 10,
             totalEpisodes: 10,
             explicitContent: false,
@@ -315,7 +305,7 @@ extension EpisodesServiceTests {
             image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
             title: "Title",
             thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-            description: "Test Description",
+            summary: "Test Description",
             pubDateMS: Date(),
             audioLengthSEC: 60*60,
             explicitContent: false

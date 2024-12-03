@@ -18,7 +18,7 @@ internal protocol SynchronousCoreDataHelper {
                                                 in context: NSManagedObjectContext) throws -> T?
 
     func fetchManagedObjects<T: NSManagedObject>(ofType type: T.Type,
-                                                 byIDs ids: [String],
+                                                 byIDs ids: [String]?,
                                                  in context: NSManagedObjectContext) throws -> [T]
 
 }

@@ -11,12 +11,9 @@ import Foundation
 public protocol StorageService: Sendable {
 
     /// Reads podcasts from storage that match the specified predicate and sort descriptors.
-    /// - Parameters:
-    ///   - predicate: An optional predicate to filter the results. If `nil`, fetches all podcasts.
-    ///   - sortBy: An optional array of sort descriptors to order the results. If `nil`, no specific order is applied.
     /// - Returns: An array of `Podcast` objects matching the criteria.
     /// - Throws: An error if the read operation fails.
-    func read(predicate: NSPredicate?, sortBy: [NSSortDescriptor]?) throws -> [Podcast]
+    func read() throws -> [Podcast]
 
     /// Asynchronously creates or updates the specified podcasts in storage.
     /// - Parameter podcasts: An array of `Podcast` objects to store.

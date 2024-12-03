@@ -11,24 +11,25 @@ import CoreData
 public struct Podcast: StorageObject {
 
     public let id: String
-    let email: String
-    let image: URL?
-    let title: String
-    let country: String
-    let website: URL?
-    let language: String
-    let genres: [Genre]
-    let publisher: String
-    let thumbnail: URL?
-    let summary: String
-    let listenScore: Int
-    let totalEpisodes: Int
-    let explicitContent: Bool
-    let latestEpisodeID: String
-    let latestPubDateMS: Date?
-    let earliestPubDateMS: Date?
-    let updateFrequencyHours: Int
-    let listenScoreGlobalRank: String
+    public let email: String
+    public let image: URL?
+    public let title: String
+    public let country: String
+    public let website: URL?
+    public let language: String
+    public let genres: [Genre]
+    public let publisher: String
+    public let thumbnail: URL?
+    public let summary: String
+    public let listenScore: Int
+    public let totalEpisodes: Int
+    public let explicitContent: Bool
+    public let latestEpisodeID: String
+    public let latestPubDateMS: Date?
+    public let earliestPubDateMS: Date?
+    public let updateFrequencyHours: Int
+    public let listenScoreGlobalRank: String
+    public let episodes: [Episode]
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -73,9 +74,11 @@ public struct Podcast: StorageObject {
         earliestPubDateMS = from.earliestPubDateMS
         updateFrequencyHours = Int(from.updateFrequencyHours)
         listenScoreGlobalRank = from.listenScoreGlobalRank ?? ""
+        episodes = (from.episodes?.allObjects as? [EpisodeStorageObject])?
+            .map { Episode(from: $0) } ?? []
     }
 
-    public init(id: String, email: String, image: URL?, title: String, country: String, website: URL?, language: String, genres: [Genre], publisher: String, thumbnail: URL?, summary: String, listenScore: Int, totalEpisodes: Int, explicitContent: Bool, latestEpisodeID: String, latestPubDateMS: Date?, earliestPubDateMS: Date?, updateFrequencyHours: Int, listenScoreGlobalRank: String) {
+    public init(id: String, email: String, image: URL?, title: String, country: String, website: URL?, language: String, genres: [Genre], publisher: String, thumbnail: URL?, summary: String, listenScore: Int, totalEpisodes: Int, explicitContent: Bool, latestEpisodeID: String, latestPubDateMS: Date?, earliestPubDateMS: Date?, updateFrequencyHours: Int, listenScoreGlobalRank: String, episodes: [Episode]) {
         self.id = id
         self.email = email
         self.image = image
@@ -95,6 +98,7 @@ public struct Podcast: StorageObject {
         self.earliestPubDateMS = earliestPubDateMS
         self.updateFrequencyHours = updateFrequencyHours
         self.listenScoreGlobalRank = listenScoreGlobalRank
+        self.episodes = episodes
     }
 
     public func toDictionary() throws -> [String : Any] {

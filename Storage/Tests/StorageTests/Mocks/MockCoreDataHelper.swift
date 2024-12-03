@@ -9,7 +9,7 @@
 import CoreData
 import Combine
 
-struct MockCoreDataHelper: CoreDataHelper {
+final class MockCoreDataHelper: CoreDataHelper {
 
     var errorToThrowForBatchInsert: Error?
     var errorToThrowForBatchDelete: Error?
@@ -39,6 +39,7 @@ struct MockCoreDataHelper: CoreDataHelper {
             completion(.failure(errorToThrowForBatchInsert))
             return
         }
+        completion(.success(()))
     }
     
     func batchDelete(objectIDs: [NSManagedObjectID], in context: NSManagedObjectContext, completion: @escaping (Result<Void, any Error>) -> Void) {
@@ -46,6 +47,7 @@ struct MockCoreDataHelper: CoreDataHelper {
             completion(.failure(errorToThrowForBatchDelete))
             return
         }
+        completion(.success(()))
     }
     
     func saveAndRelateEpisodes(_ episodes: [Storage.EpisodeStorageObject], to podcast: Storage.PodcastStorageObject, in context: NSManagedObjectContext, completion: @escaping (Result<Void, any Error>) -> Void) {
@@ -53,6 +55,7 @@ struct MockCoreDataHelper: CoreDataHelper {
             completion(.failure(errorToThrowForSaveAndRelateEpisodes))
             return
         }
+        completion(.success(()))
     }
     
     func batchInsertPublisher(entityName: String, objects: [[String : Any]], in context: NSManagedObjectContext) -> AnyPublisher<Void, any Error> {
@@ -96,7 +99,7 @@ struct MockCoreDataHelper: CoreDataHelper {
         return dataToReturnForFetchObject as? T
     }
     
-    func fetchManagedObjects<T>(ofType type: T.Type, byIDs ids: [String], in context: NSManagedObjectContext) throws -> [T] where T : NSManagedObject {
+    func fetchManagedObjects<T>(ofType type: T.Type, byIDs ids: [String]?, in context: NSManagedObjectContext) throws -> [T] where T : NSManagedObject {
         if let errorToThrowForFetchObjects {
             throw errorToThrowForFetchObjects
         }

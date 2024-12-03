@@ -33,13 +33,15 @@ extension DefaultFileManagerHelper: AsyncFileManagerHelper {
             throw URLError(.badServerResponse)
         }
 
-        let fileURL = URL.applicationSupportDirectory.appending(path: networkURL.path(percentEncoded: false))
+        let fileURL = URL.applicationSupportDirectory.appending(path: networkURL.path(percentEncoded: false).dropFirst())
         let directoryURL = fileURL.deletingLastPathComponent()
 
         if !FileManager.default.fileExists(atPath: directoryURL.path) {
             try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
         }
-        if !FileManager.default.createFile(atPath: fileURL.path(), contents: data) {
+        do {
+            try data.write(to: fileURL)
+        } catch {
             throw StorageError.downloadFailed
         }
         return fileURL
@@ -76,7 +78,9 @@ extension DefaultFileManagerHelper: ClosureFileManagerHelper {
                 if !FileManager.default.fileExists(atPath: directoryURL.path) {
                     try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
                 }
-                if !FileManager.default.createFile(atPath: fileURL.path(), contents: data) {
+                do {
+                    try data.write(to: fileURL)
+                } catch {
                     throw StorageError.downloadFailed
                 }
                 completionHandler(.success(fileURL))
@@ -110,7 +114,9 @@ extension DefaultFileManagerHelper: CombineFileManagerHelper {
                 if !FileManager.default.fileExists(atPath: directoryURL.path) {
                     try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
                 }
-                if !FileManager.default.createFile(atPath: fileURL.path(), contents: data) {
+                do {
+                    try data.write(to: fileURL)
+                } catch {
                     throw StorageError.downloadFailed
                 }
                 return fileURL

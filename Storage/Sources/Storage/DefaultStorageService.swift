@@ -6,7 +6,7 @@ import Combine
 
 public final class DefaultStorageService: StorageService, @unchecked Sendable {
 
-    private let container: NSPersistentContainer
+    internal let container: NSPersistentContainer
     private let backgroundContext: NSManagedObjectContext
     private let fileManager: FileManagerHelper
     private let coreData: CoreDataHelper
@@ -16,10 +16,16 @@ public final class DefaultStorageService: StorageService, @unchecked Sendable {
     internal init(fileManager: FileManagerHelper, coreData: CoreDataHelper) {
         self.fileManager = fileManager
         self.coreData = coreData
-        container = NSPersistentContainer(name: "Storage")
+        guard let modelURL = Bundle.module.url(forResource: "Model", withExtension: "momd"),
+              let model = NSManagedObjectModel.init(contentsOf: modelURL) else {
+            fatalError("Model not found")
+        }
+
+        container = NSPersistentContainer(name: "Model", managedObjectModel: model)
         // Keep persistent storage in memory for test
         container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
-        container.loadPersistentStores { _, error in
+        container.persistentStoreDescriptions.first?.type = NSInMemoryStoreType
+        container.loadPersistentStores { descriptions, error in
             if let error = error {
                 fatalError("Unresolved error \(error)")
             }
@@ -43,11 +49,9 @@ public final class DefaultStorageService: StorageService, @unchecked Sendable {
         backgroundContext.automaticallyMergesChangesFromParent = true
     }
 
-    public func read(predicate: NSPredicate? = nil, sortBy: [NSSortDescriptor]? = nil) throws -> [Podcast] {
-        let fetchRequest = NSFetchRequest<PodcastStorageObject>(entityName: "PodcastStorageObject")
-        fetchRequest.predicate = predicate
-        fetchRequest.sortDescriptors = sortBy
-        return try container.viewContext.fetch(fetchRequest).map { Podcast(from: $0) }
+    public func read() throws -> [Podcast] {
+        return try coreData.fetchManagedObjects(ofType: PodcastStorageObject.self, byIDs: nil, in: container.viewContext)
+            .map { Podcast(from: $0) }
     }
 
 }
@@ -91,24 +95,29 @@ public extension DefaultStorageService {
         guard let episodeStorageObject = try coreData.fetchManagedObject(ofType: EpisodeStorageObject.self, byID: episode.id, in: backgroundContext) else {
             throw StorageError.objectNotFound("Podcast Episode with ID \(episode.id) not found.")
         }
-        let audioFile = try await fileManager.downloadFile(at: episodeStorageObject.audio, session: session)
-        let imageFile = try await fileManager.downloadFile(at: episodeStorageObject.image, session: session)
-        let thumbnailFile = try await fileManager.downloadFile(at: episodeStorageObject.thumbnail, session: session)
+        do {
+            let audioFile = try await fileManager.downloadFile(at: episodeStorageObject.audio, session: session)
+            let imageFile = try await fileManager.downloadFile(at: episodeStorageObject.image, session: session)
+            let thumbnailFile = try await fileManager.downloadFile(at: episodeStorageObject.thumbnail, session: session)
 
-        try await withCheckedThrowingContinuation { continuation in
-            backgroundContext.performAndWait { [weak self] in
-                do {
-                    episodeStorageObject.audio = audioFile
-                    episodeStorageObject.image = imageFile
-                    episodeStorageObject.thumbnail = thumbnailFile
-                    episodeStorageObject.availabileOffline = true
-                    try self?.backgroundContext.save()
-                    continuation.resume()
-                } catch {
-                    try? self?.fileManager.cleanUpFiles(for: episode)
-                    continuation.resume(throwing: error)
+            try await withCheckedThrowingContinuation { continuation in
+                backgroundContext.performAndWait { [weak self] in
+                    do {
+                        episodeStorageObject.audio = audioFile
+                        episodeStorageObject.image = imageFile
+                        episodeStorageObject.thumbnail = thumbnailFile
+                        episodeStorageObject.availabileOffline = true
+                        try self?.backgroundContext.save()
+                        continuation.resume()
+                    } catch {
+                        try? self?.fileManager.cleanUpFiles(for: episode)
+                        continuation.resume(throwing: error)
+                    }
                 }
             }
+        } catch {
+            try? fileManager.cleanUpFiles(for: episode)
+            throw error
         }
     }
 }
@@ -206,18 +215,22 @@ public extension DefaultStorageService {
                                         }
                                     }
                                 case .failure(let error):
+                                    try? self?.fileManager.cleanUpFiles(for: episode)
                                     completion(.failure(error))
                                 }
                             }
                         case .failure(let error):
+                            try? self.fileManager.cleanUpFiles(for: episode)
                             completion(.failure(error))
                         }
                     }
                 case .failure(let error):
+                    try? self.fileManager.cleanUpFiles(for: episode)
                     completion(.failure(error))
                 }
             }
         } catch {
+            try? self.fileManager.cleanUpFiles(for: episode)
             completion(.failure(error))
         }
     }

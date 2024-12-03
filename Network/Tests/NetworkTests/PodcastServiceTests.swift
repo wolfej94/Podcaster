@@ -72,12 +72,7 @@ extension PodcastServiceTests {
             _ = try await subject.popular(page: 1)
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -133,12 +128,7 @@ extension PodcastServiceTests {
             _ = try await subject.recommended(basedOn: TestData.podcast, page: 1)
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -194,12 +184,7 @@ extension PodcastServiceTests {
             _ = try await subject.search(query: TestData.searchQuery, page: 1)
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -270,12 +255,7 @@ extension PodcastServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -347,12 +327,7 @@ extension PodcastServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -424,12 +399,7 @@ extension PodcastServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -526,12 +496,7 @@ extension PodcastServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -631,12 +596,7 @@ extension PodcastServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -736,12 +696,7 @@ extension PodcastServiceTests {
             }
             Issue.record("Request should fail")
         } catch let error as URLError {
-            switch error.code {
-            case .badServerResponse:
-                break
-            default:
-                Issue.record("Request should throw a bar server response error")
-            }
+            #expect(error.code == .badServerResponse)
         }
     }
 
@@ -786,7 +741,7 @@ extension PodcastServiceTests {
             genreIDS: [1],
             publisher: "Test Publisher",
             thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-            description: "Test Description",
+            summary: "Test Description",
             listenScore: 10,
             totalEpisodes: 10,
             explicitContent: false,

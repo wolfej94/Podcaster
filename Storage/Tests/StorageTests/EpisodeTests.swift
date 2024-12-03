@@ -1,6 +1,7 @@
 import Testing
 import Foundation
 import Combine
+import CoreData
 @testable import Storage
 
 extension Tag {
@@ -14,7 +15,6 @@ extension Tag.EpisodeTestTag {
     @Tag static var closure: Tag
     @Tag static var create: Tag
     @Tag static var read: Tag
-    @Tag static var update: Tag
     @Tag static var delete: Tag
     @Tag static var download: Tag
 }
@@ -26,8 +26,10 @@ final class EpisodesTests {
     let fileManager: DefaultFileManagerHelper
     let mockFileManager: MockFileManagerHelper
     let mockCoreData: MockCoreDataHelper
-    let subjectUsingMockHelpers: StorageService
-    let subjectUsingMockNetworkSession: StorageService
+    let subjectUsingMockHelpers: DefaultStorageService
+    let subjectUsingMockNetworkSession: DefaultStorageService
+    let context: NSManagedObjectContext
+    var cancellables = Set<AnyCancellable>()
 
     init() {
         self.mockFileManager = MockFileManagerHelper()
@@ -39,6 +41,7 @@ final class EpisodesTests {
         self.fileManager = DefaultFileManagerHelper()
         self.subjectUsingMockNetworkSession = DefaultStorageService(fileManager: fileManager,
                                                                     coreData: mockCoreData)
+        self.context = subjectUsingMockNetworkSession.container.viewContext
     }
 
 }
@@ -49,14 +52,22 @@ extension EpisodesTests {
           .tags(Tag.EpisodeTestTag.sync, Tag.EpisodeTestTag.read)
     )
     func errorThrowsWhenFetchEpisodesFails() throws {
-
+        mockCoreData.errorToThrowForFetchObjects = TestData.Error.generic
+        do {
+            _ = try subjectUsingMockHelpers.read().first?.episodes
+            Issue.record("Fetch should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test data returned when fetch episodes succeeds",
           .tags(Tag.EpisodeTestTag.sync, Tag.EpisodeTestTag.read)
     )
     func dataReturnedThrowWhenFetchEpisodesSucceeds() throws {
-
+        mockCoreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast, context: context)]
+        let episodes = try subjectUsingMockHelpers.read().first?.episodes
+        #expect(episodes?.first?.id == TestData.episode.id)
     }
 }
 
@@ -67,126 +78,232 @@ extension EpisodesTests {
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.create)
     )
     func asyncCreateThrowsWhenBatchInsertFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.errorToThrowForBatchInsert = TestData.Error.generic
+        do {
+            _ = try await subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast)
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test async create throws when fetch podcast fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.create)
     )
     func asyncCreateThrowsWhenFetchPodcastFails() async throws {
+        mockCoreData.errorToThrowForFetchObject = TestData.Error.generic
+        do {
+            _ = try await subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast)
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
+    }
 
+    @Test("Test async create throws when fetch podcast returns nil",
+          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.create)
+    )
+    func asyncCreateThrowsWhenFetchPodcastReturnsNil() async throws {
+        mockCoreData.dataToReturnForFetchObject = nil
+        do {
+            _ = try await subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast)
+            Issue.record("Create should throw")
+        } catch let error as StorageError {
+            switch error {
+            case .objectNotFound:
+                break
+            default:
+                Issue.record("Incorrect error thrown")
+            }
+        }
     }
 
     @Test("Test async create throws when fetch created episodes fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.create)
     )
-    func asyncCreateThrowsWhenFetchPodcastIDFails() async throws {
-
+    func asyncCreateThrowsWhenFetchCreatedEpisodesFails() async throws {
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.errorToThrowForFetchObjects = TestData.Error.generic
+        do {
+            _ = try await subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast)
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test async create throws when save and relate episodes fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.create)
     )
     func asyncCreateThrowsWhenSaveAndRelateEpisodesFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.dataToReturnForFetchObjects = [EpisodeStorageObject(episode: TestData.episode,
+                                                                         context: context)]
+        mockCoreData.errorToThrowForSaveAndRelateEpisodes = TestData.Error.generic
+        do {
+            _ = try await subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast)
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test async create does not throw when create episodes succeeds",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.create)
     )
     func asyncCreateDoesNotThrowWhenCreateEpisodesSucceeds() async throws {
-
-    }
-
-    @Test("Test async update throws when batch insert fails",
-          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.update)
-    )
-    func asyncUpdateThrowsWhenBatchInsertFails() async throws {
-
-    }
-
-    @Test("Test async update throws when fetch podcast fails",
-          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.update)
-    )
-    func asyncUpdateThrowsWhenFetchPodcastFails() async throws {
-
-    }
-
-    @Test("Test async update throws when fetch created episodes fails",
-          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.update)
-    )
-    func asyncUpdateThrowsWhenFetchPodcastIDFails() async throws {
-
-    }
-
-    @Test("Test async update throws when save and relate episodes fails",
-          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.update)
-    )
-    func asyncUpdateThrowsWhenSaveAndRelateEpisodesFails() async throws {
-
-    }
-
-    @Test("Test async update does not throw when create episodes succeeds",
-          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.update)
-    )
-    func asyncUpdateDoesNotThrowWhenCreateEpisodesSucceeds() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.dataToReturnForFetchObjects = [EpisodeStorageObject(episode: TestData.episode,
+                                                                         context: context)]
+        do {
+            _ = try await subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast)
+        } catch {
+            Issue.record("Create should not throw")
+        }
     }
 
     @Test("Test async delete throws when delete episodes fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.delete)
     )
     func asyncDeleteThrowsWhenDeleteEpisodesFails() async throws {
-
+        mockCoreData.errorToThrowForBatchDelete = TestData.Error.generic
+        do {
+            try await subjectUsingMockHelpers.delete([TestData.episode])
+            Issue.record("Delete should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
-    @Test("Test async delete throws when fetch episodes fails",
+    @Test("Test async delete throws when fetch episode IDs fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.delete)
     )
-    func asyncDeleteThrowsWhenFetchEpisodesFails() async throws {
-
+    func asyncDeleteThrowsWhenFetchEpisodeIDsFails() async throws {
+        mockCoreData.errorToThrowForFetchObjectIDs = TestData.Error.generic
+        do {
+            try await subjectUsingMockHelpers.delete([TestData.episode])
+            Issue.record("Delete should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test async delete does not throw when delete episodes succeeds",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.delete)
     )
     func asyncDeleteDoesNotThrowWhenDeleteSucceeds() async throws {
+        do {
+            try await subjectUsingMockHelpers.delete([TestData.episode])
+        } catch {
+            Issue.record("Delete should not throw")
+        }
+    }
 
+    @Test("Test async download throws when failing to fetch episode",
+          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
+    )
+    func asyncDownloadThrowsWhenFailingToFetchEpisode() async throws {
+        mockCoreData.errorToThrowForFetchObject = TestData.Error.generic
+        do {
+            try await subjectUsingMockHelpers.download(episode: TestData.episode)
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test async download throws when failing to store in file manager",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
     )
     func asyncDownloadThrowsWhenDownloadEpisodeFailsToStoreInFileManager() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await subjectUsingMockHelpers.download(episode: TestData.episode)
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test async cleanup files called when download episode fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
     )
     func asyncCleanupFilesCalledWhenDownloadEpisodeFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await subjectUsingMockHelpers.download(episode: TestData.episode)
+            Issue.record("Download should not throw")
+        } catch {
+            #expect(mockFileManager.cleanupFilesCalled)
+        }
     }
 
-    @Test("Test async download throws when downloading an episode and download audio fails network request",
+    @Test("Test async download throws when downloading an episode fails network request",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
     )
-    func asyncDownloadThrowsWhenDownloadingAnEpisodeAndDownloadAudioFailsNetworkRequest() async throws {
-
+    func asyncDownloadThrowsWhenDownloadingAnEpisodeFailsNetworkRequest() async throws {
+        mockNetworkSession.errorToThrow = URLError(.badServerResponse)
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession)
+            Issue.record("Download should not throw")
+        } catch let error as URLError {
+            #expect(error.code == .badServerResponse)
+        }
     }
 
-    @Test("Test async download throws when download image fails network request",
+    @Test("Test async download throws when fetching episode fails",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
     )
-    func asyncDownloadThrowsWhenDownloadingAnEpisodeAndDownloaImageFailsNetworkRequest() async throws {
-
+    func asyncDownloadThrowsWhenFetchingEpisodeFails() async throws {
+        mockCoreData.dataToReturnForFetchObject = nil
+        do {
+            try await subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession)
+            Issue.record("Download should not throw")
+        } catch let error as StorageError {
+            switch error {
+            case .objectNotFound:
+                break
+            default:
+                Issue.record("Download should throw StorageError.objectNotFound")
+            }
+        }
     }
 
-    @Test("Test async download throws when download thumbnail fails network request",
+    @Test("Test async download succeeds when nothing throws",
           .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
     )
-    func asyncDownloadThrowsWhenDownloadingAnEpisodeAndDownloadThumbnailFailsNetworkRequest() async throws {
+    func asyncDownloadSucceedsWhenNothingThrows() async throws {
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockNetworkSession.dataToReceive = TestData.validDownloadData
+        mockNetworkSession.responseToReceive = TestData.successfulDownloadResponse
+        do {
+            try await subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession)
+        } catch {
+            Issue.record("Download should not throw")
+        }
+    }
 
+    @Test("Test async download fails when network response is failure",
+          .tags(Tag.EpisodeTestTag.async, Tag.EpisodeTestTag.download)
+    )
+    func asyncDownloadThrowsWhenNetworkResponseIsFailure() async throws {
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockNetworkSession.responseToReceive = TestData.failedDownloadResponse
+        do {
+            try await subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession)
+            Issue.record("Download should not throw")
+        } catch let error as URLError {
+            #expect(error.code == .badServerResponse)
+        }
     }
 
 }
@@ -198,126 +315,263 @@ extension EpisodesTests {
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.create)
     )
     func closureCreateThrowsWhenBatchInsertFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.errorToThrowForBatchInsert = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast) { continuation.resume(with: $0) }
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure create throws when fetch podcast fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.create)
     )
     func closureCreateThrowsWhenFetchPodcastFails() async throws {
-
+        mockCoreData.errorToThrowForFetchObject = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast) { continuation.resume(with: $0) }
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure create throws when fetch created episodes fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.create)
     )
-    func closureCreateThrowsWhenFetchPodcastIDFails() async throws {
+    func closureCreateThrowsWhenFetchCreatedEpisodesFails() async throws {
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.errorToThrowForFetchObjects = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast) { continuation.resume(with: $0) }
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
+    }
 
+    @Test("Test closure create throws when fetch podcast returns nil",
+          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.create)
+    )
+    func closureCreateThrowsWhenFetchPodcastReturnsNil() async throws {
+        mockCoreData.dataToReturnForFetchObject = nil
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast) { continuation.resume(with: $0) }
+            }
+            Issue.record("Create should throw")
+        } catch let error as StorageError {
+            switch error {
+            case .objectNotFound:
+                break
+            default:
+                Issue.record("Incorrect error thrown")
+            }
+        }
     }
 
     @Test("Test closure create throws when save and relate episodes fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.create)
     )
     func closureCreateThrowsWhenSaveAndRelateEpisodesFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.dataToReturnForFetchObjects = [EpisodeStorageObject(episode: TestData.episode,
+                                                                         context: context)]
+        mockCoreData.errorToThrowForSaveAndRelateEpisodes = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast) { continuation.resume(with: $0) }
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure create does not throw when create episodes succeeds",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.create)
     )
     func closureCreateDoesNotThrowWhenCreateEpisodesSucceeds() async throws {
-
-    }
-
-    @Test("Test closure update throws when batch insert fails",
-          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.update)
-    )
-    func closureUpdateThrowsWhenBatchInsertFails() async throws {
-
-    }
-
-    @Test("Test closure update throws when fetch podcast fails",
-          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.update)
-    )
-    func closureUpdateThrowsWhenFetchPodcastFails() async throws {
-
-    }
-
-    @Test("Test closure update throws when fetch created episodes fails",
-          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.update)
-    )
-    func closureUpdateThrowsWhenFetchPodcastIDFails() async throws {
-
-    }
-
-    @Test("Test closure update throws when save and relate episodes fails",
-          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.update)
-    )
-    func closureUpdateThrowsWhenSaveAndRelateEpisodesFails() async throws {
-
-    }
-
-    @Test("Test closure update does not throw when create episodes succeeds",
-          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.update)
-    )
-    func closureUpdateDoesNotThrowWhenCreateEpisodesSucceeds() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.dataToReturnForFetchObjects = [EpisodeStorageObject(episode: TestData.episode,
+                                                                         context: context)]
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.create([TestData.episode], forPodcast: TestData.podcast) { continuation.resume(with: $0) }
+            }
+        } catch {
+            Issue.record("Create should not throw")
+        }
     }
 
     @Test("Test closure delete throws when delete episodes fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.delete)
     )
     func closureDeleteThrowsWhenDeleteEpisodesFails() async throws {
-
+        mockCoreData.errorToThrowForBatchDelete = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.delete([TestData.episode]) { continuation.resume(with: $0) }
+            }
+            Issue.record("Delete should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure delete throws when fetch episodes fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.delete)
     )
     func closureDeleteThrowsWhenFetchEpisodesFails() async throws {
-
+        mockCoreData.errorToThrowForFetchObjectIDs = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.delete([TestData.episode]) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure delete does not throw when delete episodes succeeds",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.delete)
     )
     func closureDeleteDoesNotThrowWhenDeleteSucceeds() async throws {
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.delete([TestData.episode]) { continuation.resume(with: $0) }
+            }
+        } catch {
+            Issue.record("Delete should not throw")
+        }
+    }
 
+    @Test("Test closure download throws when failing to fetch episode",
+          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
+    )
+    func closureDownloadThrowsWhenFailingToFetchEpisode() async throws {
+        mockCoreData.errorToThrowForFetchObject = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.download(episode: TestData.episode) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure download throws when failing to store in file manager",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
     )
     func closureDownloadThrowsWhenDownloadEpisodeFailsToStoreInFileManager() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.download(episode: TestData.episode) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test closure cleanup files called when download episode fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
     )
     func closureCleanupFilesCalledWhenDownloadEpisodeFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.download(episode: TestData.episode) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch {
+            #expect(mockFileManager.cleanupFilesCalled)
+        }
     }
 
-    @Test("Test closure download throws when downloading an episode and download audio fails network request",
+    @Test("Test closure download throws when downloading an episode fails network request",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
     )
-    func closureDownloadThrowsWhenDownloadingAnEpisodeAndDownloadAudioFailsNetworkRequest() async throws {
-
+    func closureDownloadThrowsWhenDownloadingAnEpisodeFailsNetworkRequest() async throws {
+        mockNetworkSession.errorToThrow = URLError(.badServerResponse)
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch let error as URLError {
+            #expect(error.code == .badServerResponse)
+        }
     }
 
-    @Test("Test closure download throws when download image fails network request",
+    @Test("Test closure download throws when fetching episode fails",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
     )
-    func closureDownloadThrowsWhenDownloadingAnEpisodeAndDownloaImageFailsNetworkRequest() async throws {
-
+    func closureDownloadThrowsWhenFetchingEpisodeFails() async throws {
+        mockCoreData.dataToReturnForFetchObject = nil
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch let error as StorageError {
+            switch error {
+            case .objectNotFound:
+                break
+            default:
+                Issue.record("Download should throw StorageError.objectNotFound")
+            }
+        }
     }
 
-    @Test("Test closure download throws when download thumbnail fails network request",
+    @Test("Test closure download succeeds when nothing throws",
           .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
     )
-    func closureDownloadThrowsWhenDownloadingAnEpisodeAndDownloadThumbnailFailsNetworkRequest() async throws {
+    func closureDownloadSucceedsWhenNothingThrows() async throws {
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockNetworkSession.dataToReceive = TestData.validDownloadData
+        mockNetworkSession.responseToReceive = TestData.successfulDownloadResponse
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession) { continuation.resume(with: $0) }
+            }
+        } catch {
+            Issue.record("Download should not throw")
+        }
+    }
 
+    @Test("Test closure download fails when network response is failure",
+          .tags(Tag.EpisodeTestTag.closure, Tag.EpisodeTestTag.download)
+    )
+    func closureDownloadThrowsWhenNetworkResponseIsFailure() async throws {
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockNetworkSession.responseToReceive = TestData.failedDownloadResponse
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.download(episode: TestData.episode, session: mockNetworkSession) { continuation.resume(with: $0) }
+            }
+            Issue.record("Download should not throw")
+        } catch let error as URLError {
+            #expect(error.code == .badServerResponse)
+        }
     }
 
 }
@@ -329,184 +583,465 @@ extension EpisodesTests {
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.create)
     )
     func combineCreateThrowsWhenBatchInsertFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.errorToThrowForBatchInsert = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.createPublisher([TestData.episode], forPodcast: TestData.podcast)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine create throws when fetch podcast fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.create)
     )
     func combineCreateThrowsWhenFetchPodcastFails() async throws {
-
+        mockCoreData.errorToThrowForFetchObject = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.createPublisher([TestData.episode], forPodcast: TestData.podcast)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine create throws when fetch created episodes fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.create)
     )
-    func combineCreateThrowsWhenFetchPodcastIDFails() async throws {
+    func combineCreateThrowsWhenFetchCreatedEpisodesFails() async throws {
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.errorToThrowForFetchObjects = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.createPublisher([TestData.episode], forPodcast: TestData.podcast)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
+    }
 
+    @Test("Test combine create throws when fetch podcast returns nil",
+          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.create)
+    )
+    func combineCreateThrowsWhenFetchPodcastReturnsNil() async throws {
+        mockCoreData.dataToReturnForFetchObject = nil
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.createPublisher([TestData.episode], forPodcast: TestData.podcast)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Create should throw")
+        } catch let error as StorageError {
+            switch error {
+            case .objectNotFound:
+                break
+            default:
+                Issue.record("Incorrect error thrown")
+            }
+        }
     }
 
     @Test("Test combine create throws when save and relate episodes fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.create)
     )
     func combineCreateThrowsWhenSaveAndRelateEpisodesFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.dataToReturnForFetchObjects = [EpisodeStorageObject(episode: TestData.episode,
+                                                                         context: context)]
+        mockCoreData.errorToThrowForSaveAndRelateEpisodes = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.createPublisher([TestData.episode], forPodcast: TestData.podcast)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Create should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine create does not throw when create episodes succeeds",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.create)
     )
     func combineCreateDoesNotThrowWhenCreateEpisodesSucceeds() async throws {
-
-    }
-
-    @Test("Test combine update throws when batch insert fails",
-          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.update)
-    )
-    func combineUpdateThrowsWhenBatchInsertFails() async throws {
-
-    }
-
-    @Test("Test combine update throws when fetch podcast fails",
-          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.update)
-    )
-    func combineUpdateThrowsWhenFetchPodcastFails() async throws {
-
-    }
-
-    @Test("Test combine update throws when fetch created episodes fails",
-          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.update)
-    )
-    func combineUpdateThrowsWhenFetchPodcastIDFails() async throws {
-
-    }
-
-    @Test("Test combine update throws when save and relate episodes fails",
-          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.update)
-    )
-    func combineUpdateThrowsWhenSaveAndRelateEpisodesFails() async throws {
-
-    }
-
-    @Test("Test combine update does not throw when create episodes succeeds",
-          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.update)
-    )
-    func combineUpdateDoesNotThrowWhenCreateEpisodesSucceeds() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
+                                                                       context: context)
+        mockCoreData.dataToReturnForFetchObjects = [EpisodeStorageObject(episode: TestData.episode,
+                                                                         context: context)]
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.createPublisher([TestData.episode], forPodcast: TestData.podcast)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+        } catch {
+            Issue.record("Create should not throw")
+        }
     }
 
     @Test("Test combine delete throws when delete episodes fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.delete)
     )
     func combineDeleteThrowsWhenDeleteEpisodesFails() async throws {
-
+        mockCoreData.errorToThrowForBatchDelete = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.deletePublisher([TestData.episode])
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Delete should throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine delete throws when fetch episodes fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.delete)
     )
     func combineDeleteThrowsWhenFetchEpisodesFails() async throws {
-
+        mockCoreData.errorToThrowForFetchObjectIDs = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.deletePublisher([TestData.episode])
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine delete does not throw when delete episodes succeeds",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.delete)
     )
     func combineDeleteDoesNotThrowWhenDeleteSucceeds() async throws {
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.deletePublisher([TestData.episode])
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+        } catch {
+            Issue.record("Delete should not throw")
+        }
+    }
 
+    @Test("Test combine download throws when failing to fetch episode",
+          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
+    )
+    func combineDownloadThrowsWhenFailingToFetchEpisode() async throws {
+        mockCoreData.errorToThrowForFetchObject = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.downloadPublisher(episode: TestData.episode)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine download throws when failing to store in file manager",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
     )
     func combineDownloadThrowsWhenDownloadEpisodeFailsToStoreInFileManager() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.downloadPublisher(episode: TestData.episode)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch let error as TestData.Error {
+            #expect(error == .generic)
+        }
     }
 
     @Test("Test combine cleanup files called when download episode fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
     )
     func combineCleanupFilesCalledWhenDownloadEpisodeFails() async throws {
-
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockFileManager.errorToThrowForDownloadFile = TestData.Error.generic
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockHelpers.downloadPublisher(episode: TestData.episode)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch {
+            #expect(mockFileManager.cleanupFilesCalled)
+        }
     }
 
-    @Test("Test combine download throws when downloading an episode and download audio fails network request",
+    @Test("Test combine download throws when downloading an episode fails network request",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
     )
-    func combineDownloadThrowsWhenDownloadingAnEpisodeAndDownloadAudioFailsNetworkRequest() async throws {
-
+    func combineDownloadThrowsWhenDownloadingAnEpisodeFailsNetworkRequest() async throws {
+        mockNetworkSession.errorToThrow = URLError(.badServerResponse)
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.downloadPublisher(episode: TestData.episode, session: mockNetworkSession)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch let error as URLError {
+            #expect(error.code == .badServerResponse)
+        }
     }
 
-    @Test("Test combine download throws when download image fails network request",
+    @Test("Test combine download throws when fetching episode fails",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
     )
-    func combineDownloadThrowsWhenDownloadingAnEpisodeAndDownloaImageFailsNetworkRequest() async throws {
-
+    func combineDownloadThrowsWhenFetchingEpisodeFails() async throws {
+        mockCoreData.dataToReturnForFetchObject = nil
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.downloadPublisher(episode: TestData.episode, session: mockNetworkSession)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch let error as StorageError {
+            switch error {
+            case .objectNotFound:
+                break
+            default:
+                Issue.record("Download should throw StorageError.objectNotFound")
+            }
+        }
     }
 
-    @Test("Test combine download throws when download thumbnail fails network request",
+    @Test("Test combine download succeeds when nothing throws",
           .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
     )
-    func combineDownloadThrowsWhenDownloadingAnEpisodeAndDownloadThumbnailFailsNetworkRequest() async throws {
+    func combineDownloadSucceedsWhenNothingThrows() async throws {
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockNetworkSession.dataToReceive = TestData.validDownloadData
+        mockNetworkSession.responseToReceive = TestData.successfulDownloadResponse
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.downloadPublisher(episode: TestData.episode, session: mockNetworkSession)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+        } catch  {
+            Issue.record("Download should not throw")
+        }
+    }
 
+    @Test("Test combine download fails when network response is failure",
+          .tags(Tag.EpisodeTestTag.combine, Tag.EpisodeTestTag.download)
+    )
+    func combineDownloadThrowsWhenNetworkResponseIsFailure() async throws {
+        mockCoreData.dataToReturnForFetchObject = EpisodeStorageObject(episode: TestData.episode, context: context)
+        mockNetworkSession.responseToReceive = TestData.failedDownloadResponse
+        do {
+            try await withCheckedThrowingContinuation { continuation in
+                subjectUsingMockNetworkSession.downloadPublisher(episode: TestData.episode, session: mockNetworkSession)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Download should not throw")
+        } catch let error as URLError {
+            #expect(error.code == .badServerResponse)
+        }
     }
 
 }
 
 extension EpisodesTests {
+    struct TestData {
+        // MARK: - Shared Data
+        static let podcast: Podcast = Podcast(
+            id: "",
+            email: "",
+            image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
+            title: "",
+            country: "",
+            website: nil,
+            language: "",
+            genres: [],
+            publisher: "",
+            thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
+            summary: "",
+            listenScore: .zero,
+            totalEpisodes: .zero,
+            explicitContent: false,
+            latestEpisodeID: "",
+            latestPubDateMS: nil,
+            earliestPubDateMS: nil,
+            updateFrequencyHours: .zero,
+            listenScoreGlobalRank: "",
+            episodes: [episode]
+        )
+        static let episode: Episode = Episode(
+            id: "",
+            audio: URL(string: "https://download.samplelib.com/mp3/sample-3s.mp3")!,
+            image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
+            title: "",
+            thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
+            summary: "",
+            pubDateMS: nil,
+            audioLengthSEC: .zero,
+            explicitContent: false,
+            availableOffline: false
+        )
+        
+        // MARK: - Download Data
+        static let successfulDownloadResponse = HTTPURLResponse(
+            url: URL(string: "https://download.samplelib.com/mp3/sample-3s.mp3")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        static let failedDownloadResponse = HTTPURLResponse(
+            url: URL(string: "https://download.samplelib.com/mp3/sample-3s.mp3")!,
+            statusCode: 403,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        static let invalidDownloadData: Data? = nil
+        static let validDownloadData: Data = {
+            var randomBytes = [UInt8](repeating: 0, count: 10)
+            let _ = randomBytes.withUnsafeMutableBytes {
+                SecRandomCopyBytes(kSecRandomDefault, 10, $0.baseAddress!)
+            }
+            return Data(randomBytes)
+        }()
 
-    // MARK: - Shared Data
-    static let podcast: Podcast = Podcast(
-        id: "",
-        email: "",
-        image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
-        title: "",
-        country: "",
-        website: nil,
-        language: "",
-        genres: [],
-        publisher: "",
-        thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-        summary: "",
-        listenScore: .zero,
-        totalEpisodes: .zero,
-        explicitContent: false,
-        latestEpisodeID: "",
-        latestPubDateMS: nil,
-        earliestPubDateMS: nil,
-        updateFrequencyHours: .zero,
-        listenScoreGlobalRank: ""
-    )
-    static let episode: Episode = Episode(
-        id: "",
-        audio: URL(string: "https://example.com")!,
-        image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
-        title: "",
-        thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-        summary: "",
-        pubDateMS: nil,
-        audioLengthSEC: .zero,
-        explicitContent: false
-    )
+        // MARK: - Errors
+        enum Error: LocalizedError {
+            case generic
 
-    // MARK: - Download Data
-    static let successfulDownloadResponse = HTTPURLResponse(
-        url: URL(string: "https://example.com")!,
-        statusCode: 200,
-        httpVersion: nil,
-        headerFields: nil
-    )
-    static let failedDownloadResponse = HTTPURLResponse(
-        url: URL(string: "https://example.com")!,
-        statusCode: 403,
-        httpVersion: nil,
-        headerFields: nil
-    )
-    static let invalidDownloadData: Data? = nil
-    static let validDownloadData = Data()
-
-    // MARK: - Errors
-    enum Error: LocalizedError {
-        case generic
+            var localizedDescription: String {
+                switch self {
+                case .generic:
+                    return "An error occurred."
+                }
+            }
+        }
     }
 }

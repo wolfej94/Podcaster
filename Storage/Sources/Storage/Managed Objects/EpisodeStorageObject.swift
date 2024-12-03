@@ -24,4 +24,19 @@ internal class EpisodeStorageObject: NSManagedObject, @unchecked Sendable {
     @NSManaged public var availabileOffline: Bool
     @NSManaged public var podcast: PodcastStorageObject?
 
+    /// To be used for testing only
+    internal convenience init(episode: Episode, podcast: PodcastStorageObject? = nil, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.audio = episode.audio
+        self.audioLengthSEC = Int16(episode.audioLengthSEC)
+        self.explicitContent = episode.explicitContent
+        self.id = episode.id
+        self.image = episode.image
+        self.pubDateMS = episode.pubDateMS
+        self.summary = episode.summary
+        self.thumbnail = episode.thumbnail
+        self.title = episode.title
+        self.availabileOffline = episode.availableOffline
+        self.podcast = podcast
+    }
 }

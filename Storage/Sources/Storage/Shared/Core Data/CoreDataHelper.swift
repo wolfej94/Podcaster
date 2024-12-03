@@ -20,10 +20,12 @@ internal struct DefaultCoreDataHelper: SynchronousCoreDataHelper {
     }
 
     func fetchManagedObjects<T: NSManagedObject>(ofType type: T.Type,
-                                                 byIDs ids: [String],
+                                                 byIDs ids: [String]?,
                                                  in context: NSManagedObjectContext) throws -> [T] {
         let fetchRequest = T.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id IN %@", ids)
+        if let ids {
+            fetchRequest.predicate = NSPredicate(format: "id IN %@", ids)
+        }
         return try context.fetch(fetchRequest as! NSFetchRequest<T>)
     }
 

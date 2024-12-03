@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MockURLProtocol: URLProtocol {
+final class MockURLProtocol: URLProtocol {
 
     nonisolated(unsafe)static var error: Error?
     nonisolated(unsafe)static var response: URLResponse?
