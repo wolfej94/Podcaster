@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6804C76B2CFDEEDF00C4FC68"
-               BuildableName = "MVVM-C.app"
-               BlueprintName = "MVVM-C"
-               ReferencedContainer = "container:MVVM-C.xcodeproj">
+               BlueprintIdentifier = "681D20942CFFE01E001B8352"
+               BuildableName = "MVVM.app"
+               BlueprintName = "MVVM"
+               ReferencedContainer = "container:MVVM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,29 +27,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:MVVM-C.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:../Podcaster Tests.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
-      <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6804C7802CFDEEE400C4FC68"
-               BuildableName = "MVVM-CTests.xctest"
-               BlueprintName = "MVVM-CTests"
-               ReferencedContainer = "container:MVVM-C.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -65,15 +44,15 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6804C76B2CFDEEDF00C4FC68"
-            BuildableName = "MVVM-C.app"
-            BlueprintName = "MVVM-C"
-            ReferencedContainer = "container:MVVM-C.xcodeproj">
+            BlueprintIdentifier = "681D20942CFFE01E001B8352"
+            BuildableName = "MVVM.app"
+            BlueprintName = "MVVM"
+            ReferencedContainer = "container:MVVM.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Live"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -82,18 +61,18 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6804C76B2CFDEEDF00C4FC68"
-            BuildableName = "MVVM-C.app"
-            BlueprintName = "MVVM-C"
-            ReferencedContainer = "container:MVVM-C.xcodeproj">
+            BlueprintIdentifier = "681D20942CFFE01E001B8352"
+            BuildableName = "MVVM.app"
+            BlueprintName = "MVVM"
+            ReferencedContainer = "container:MVVM.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Live">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Live"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

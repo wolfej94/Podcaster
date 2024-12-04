@@ -63,18 +63,21 @@
             </FileRef>
          </Group>
          <Group
-    location = "group:Configuration"
-    name = "Configuration">
-    <FileRef
-       location = "group:Develop.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:Live.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:UAT.xcconfig">
-    </FileRef>
- </Group>
+            location = "group:Configuration"
+            name = "Configuration">
+            <FileRef
+               location = "group:Configuration.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Develop.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Live.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:UAT.xcconfig">
+            </FileRef>
+         </Group>
       </Group>
    </Group>
    <Group
@@ -98,18 +101,21 @@
             </Group>
          </Group>
          <Group
-    location = "group:Configuration"
-    name = "Configuration">
-    <FileRef
-       location = "group:Develop.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:Live.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:UAT.xcconfig">
-    </FileRef>
- </Group>
+            location = "group:Configuration"
+            name = "Configuration">
+            <FileRef
+               location = "group:Configuration.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Develop.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Live.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:UAT.xcconfig">
+            </FileRef>
+         </Group>
          <Group
             location = "group:App"
             name = "App">
@@ -186,18 +192,21 @@
             </Group>
          </Group>
          <Group
-    location = "group:Configuration"
-    name = "Configuration">
-    <FileRef
-       location = "group:Develop.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:Live.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:UAT.xcconfig">
-    </FileRef>
- </Group>
+            location = "group:Configuration"
+            name = "Configuration">
+            <FileRef
+               location = "group:Configuration.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Develop.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Live.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:UAT.xcconfig">
+            </FileRef>
+         </Group>
          <Group
             location = "group:App"
             name = "App">
@@ -264,18 +273,21 @@
             </FileRef>
          </Group>
          <Group
-    location = "group:Configuration"
-    name = "Configuration">
-    <FileRef
-       location = "group:Develop.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:Live.xcconfig">
-    </FileRef>
-    <FileRef
-       location = "group:UAT.xcconfig">
-    </FileRef>
- </Group>
+            location = "group:Configuration"
+            name = "Configuration">
+            <FileRef
+               location = "group:Configuration.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Develop.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:Live.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:UAT.xcconfig">
+            </FileRef>
+         </Group>
       </Group>
       <Group
          location = "group:MVVM-CTests"
