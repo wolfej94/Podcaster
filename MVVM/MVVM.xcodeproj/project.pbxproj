@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		681D227A2CFFE93E001B8352 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 681D22792CFFE93E001B8352 /* Storage */; };
+		681D227D2CFFE945001B8352 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 681D227C2CFFE945001B8352 /* Network */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		681D20A62CFFE020001B8352 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -44,6 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681D227A2CFFE93E001B8352 /* Storage in Frameworks */,
+				681D227D2CFFE945001B8352 /* Network in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +103,8 @@
 			);
 			name = MVVM;
 			packageProductDependencies = (
+				681D22792CFFE93E001B8352 /* Storage */,
+				681D227C2CFFE945001B8352 /* Network */,
 			);
 			productName = MVVM;
 			productReference = 681D20952CFFE01E001B8352 /* MVVM.app */;
@@ -152,6 +161,10 @@
 			);
 			mainGroup = 681D208C2CFFE01E001B8352;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				681D22782CFFE93E001B8352 /* XCLocalSwiftPackageReference "../Storage" */,
+				681D227B2CFFE945001B8352 /* XCLocalSwiftPackageReference "../Network" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 681D20962CFFE01E001B8352 /* Products */;
 			projectDirPath = "";
@@ -452,6 +465,28 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		681D22782CFFE93E001B8352 /* XCLocalSwiftPackageReference "../Storage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Storage;
+		};
+		681D227B2CFFE945001B8352 /* XCLocalSwiftPackageReference "../Network" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Network;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		681D22792CFFE93E001B8352 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
+		};
+		681D227C2CFFE945001B8352 /* Network */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Network;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 681D208D2CFFE01E001B8352 /* Project object */;
 }

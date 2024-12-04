@@ -137,6 +137,37 @@
          location = "group:MVVM"
          name = "MVVM">
          <Group
+            location = "group:Features"
+            name = "Features">
+            <Group
+               location = "group:Common"
+               name = "Common">
+               <FileRef
+                  location = "group:ViewModel.swift">
+               </FileRef>
+               <Group
+                  location = "group:Commands"
+                  name = "Commands">
+                  <FileRef
+                     location = "group:Command.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:AsyncCommand.swift">
+                  </FileRef>
+               </Group>
+            </Group>
+            <Group
+               location = "group:Content"
+               name = "Content">
+               <FileRef
+                  location = "group:ContentViewModel.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:ContentView.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
             location = "group:Configuration"
             name = "Configuration">
          </Group>
@@ -150,9 +181,6 @@
                location = "group:MVVMApp.swift">
             </FileRef>
          </Group>
-         <FileRef
-            location = "group:ContentView.swift">
-         </FileRef>
       </Group>
    </Group>
    <Group

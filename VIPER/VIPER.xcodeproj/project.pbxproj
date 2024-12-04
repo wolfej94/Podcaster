@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		681D22622CFFE880001B8352 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 681D22612CFFE880001B8352 /* Network */; };
+		681D22652CFFE887001B8352 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 681D22642CFFE887001B8352 /* Storage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		681D21642CFFE078001B8352 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -57,6 +62,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681D22652CFFE887001B8352 /* Storage in Frameworks */,
+				681D22622CFFE880001B8352 /* Network in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +116,8 @@
 			);
 			name = VIPER;
 			packageProductDependencies = (
+				681D22612CFFE880001B8352 /* Network */,
+				681D22642CFFE887001B8352 /* Storage */,
 			);
 			productName = VIPER;
 			productReference = 681D214D2CFFE077001B8352 /* VIPER.app */;
@@ -165,6 +174,10 @@
 			);
 			mainGroup = 681D21442CFFE077001B8352;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				681D22602CFFE880001B8352 /* XCLocalSwiftPackageReference "../Network" */,
+				681D22632CFFE887001B8352 /* XCLocalSwiftPackageReference "../Storage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 681D214E2CFFE077001B8352 /* Products */;
 			projectDirPath = "";
@@ -463,6 +476,28 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		681D22602CFFE880001B8352 /* XCLocalSwiftPackageReference "../Network" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Network;
+		};
+		681D22632CFFE887001B8352 /* XCLocalSwiftPackageReference "../Storage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Storage;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		681D22612CFFE880001B8352 /* Network */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Network;
+		};
+		681D22642CFFE887001B8352 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 681D21452CFFE077001B8352 /* Project object */;
 }
