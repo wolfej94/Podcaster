@@ -21,6 +21,32 @@
          location = "group:VIPER"
          name = "VIPER">
          <Group
+            location = "group:Features"
+            name = "Features">
+            <Group
+               location = "group:View"
+               name = "View">
+               <FileRef
+                  location = "group:View.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:View.xib">
+               </FileRef>
+               <FileRef
+                  location = "group:ViewPresenter.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:ViewInteractor.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:ViewEntity.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:ViewRouter.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
             location = "group:App"
             name = "App">
             <FileRef
@@ -40,9 +66,6 @@
             location = "group:Configuration"
             name = "Configuration">
          </Group>
-         <FileRef
-            location = "group:ViewController.swift">
-         </FileRef>
       </Group>
    </Group>
    <Group
