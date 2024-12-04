@@ -5,14 +5,52 @@
       location = "group:Podcaster Tests.xctestplan">
    </FileRef>
    <Group
-      location = "group:MVVM-C"
-      name = "MVVM-C">
+      location = "group:VIPER"
+      name = "VIPER">
       <FileRef
-         location = "group:MVVM-C.xcodeproj">
+         location = "group:VIPER.xcodeproj">
       </FileRef>
       <Group
-         location = "group:MVVM-C"
-         name = "MVVM-C">
+         location = "group:VIPERTests"
+         name = "VIPERTests">
+         <FileRef
+            location = "group:VIPERTests.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:VIPER"
+         name = "VIPER">
+         <Group
+            location = "group:App"
+            name = "App">
+            <FileRef
+               location = "group:Info.plist">
+            </FileRef>
+            <FileRef
+               location = "group:AppDelegate.swift">
+            </FileRef>
+            <FileRef
+               location = "group:SceneDelegate.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Assets.xcassets">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Configuration"
+            name = "Configuration">
+         </Group>
+         <FileRef
+            location = "group:ViewController.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "group:MVC"
+      name = "MVC">
+      <Group
+         location = "group:MVC"
+         name = "MVC">
          <Group
             location = "group:Configuration"
             name = "Configuration">
@@ -24,12 +62,94 @@
                location = "group:Assets.xcassets">
             </FileRef>
             <FileRef
-               location = "group:MVVM_CApp.swift">
+               location = "group:AppDelegate.swift">
             </FileRef>
             <FileRef
-               location = "group:ContentView.swift">
+               location = "group:Info.plist">
+            </FileRef>
+            <FileRef
+               location = "group:SceneDelegate.swift">
             </FileRef>
          </Group>
+         <FileRef
+            location = "group:ViewController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:View.xib">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:MVC.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:MVCTests"
+         name = "MVCTests">
+         <FileRef
+            location = "group:MVCTests.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "group:MVVM"
+      name = "MVVM">
+      <FileRef
+         location = "group:MVVM.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:MVVMTests"
+         name = "MVVMTests">
+         <FileRef
+            location = "group:MVVMTests.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:MVVM"
+         name = "MVVM">
+         <Group
+            location = "group:Configuration"
+            name = "Configuration">
+         </Group>
+         <Group
+            location = "group:App"
+            name = "App">
+            <FileRef
+               location = "group:Assets.xcassets">
+            </FileRef>
+            <FileRef
+               location = "group:MVVMApp.swift">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:ContentView.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "group:MVVM-C"
+      name = "MVVM-C">
+      <FileRef
+         location = "group:MVVM-C.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:MVVM-C"
+         name = "MVVM-C">
+         <Group
+            location = "group:App"
+            name = "App">
+            <FileRef
+               location = "group:Assets.xcassets">
+            </FileRef>
+            <FileRef
+               location = "group:MVVM_CApp.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Configuration"
+            name = "Configuration">
+         </Group>
+         <FileRef
+            location = "group:ContentView.swift">
+         </FileRef>
       </Group>
       <Group
          location = "group:MVVM-CTests"
