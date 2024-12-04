@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:Podcaster Tests.xctestplan">
+   </FileRef>
+   <Group
+      location = "group:MVVM-C"
+      name = "MVVM-C">
+      <FileRef
+         location = "group:MVVM-C.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:MVVM-C"
+         name = "MVVM-C">
+         <Group
+            location = "group:Configuration"
+            name = "Configuration">
+         </Group>
+         <Group
+            location = "group:App"
+            name = "App">
+            <FileRef
+               location = "group:Assets.xcassets">
+            </FileRef>
+            <FileRef
+               location = "group:MVVM_CApp.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ContentView.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:MVVM-CTests"
+         name = "MVVM-CTests">
+         <FileRef
+            location = "group:MVVM_CTests.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <FileRef
+      location = "group:Storage">
+   </FileRef>
+   <FileRef
+      location = "group:Network">
+   </FileRef>
+</Workspace>

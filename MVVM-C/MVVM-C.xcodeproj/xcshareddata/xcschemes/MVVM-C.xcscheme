@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Network"
-               BuildableName = "Network"
-               BlueprintName = "Network"
-               ReferencedContainer = "container:">
+               BlueprintIdentifier = "6804C76B2CFDEEDF00C4FC68"
+               BuildableName = "MVVM-C.app"
+               BlueprintName = "MVVM-C"
+               ReferencedContainer = "container:MVVM-C.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:.swiftpm/Network.xctestplan">
+            reference = "container:MVVM-C.xctestplan">
          </TestPlanReference>
          <TestPlanReference
             reference = "container:../Podcaster Tests.xctestplan"
@@ -39,13 +39,14 @@
       </TestPlans>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NetworkTests"
-               BuildableName = "NetworkTests"
-               BlueprintName = "NetworkTests"
-               ReferencedContainer = "container:">
+               BlueprintIdentifier = "6804C7802CFDEEE400C4FC68"
+               BuildableName = "MVVM-CTests.xctest"
+               BlueprintName = "MVVM-CTests"
+               ReferencedContainer = "container:MVVM-C.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -60,6 +61,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "6804C76B2CFDEEDF00C4FC68"
+            BuildableName = "MVVM-C.app"
+            BlueprintName = "MVVM-C"
+            ReferencedContainer = "container:MVVM-C.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -67,15 +78,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Network"
-            BuildableName = "Network"
-            BlueprintName = "Network"
-            ReferencedContainer = "container:">
+            BlueprintIdentifier = "6804C76B2CFDEEDF00C4FC68"
+            BuildableName = "MVVM-C.app"
+            BlueprintName = "MVVM-C"
+            ReferencedContainer = "container:MVVM-C.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

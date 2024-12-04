@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Sources/Storage.xctestplan"
+            reference = "container:../Podcaster Tests.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

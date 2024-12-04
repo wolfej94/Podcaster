@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import Storage
 
-final class MockNetworkURLSession: Storage.NetworkURLSession, @unchecked Sendable {
+final class MockNetworkURLSession: NetworkURLSession, @unchecked Sendable {
 
     var dataToReceive: Data? {
         set {

@@ -6,15 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		68B9C15E2CFFA5C700774E75 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 68B9C15D2CFFA5C700774E75 /* Network */; };
+		68B9C1612CFFA5D800774E75 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 68B9C1602CFFA5D800774E75 /* Storage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6804C7822CFDEEE400C4FC68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6804C7642CFDEEDF00C4FC68 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6804C76B2CFDEEDF00C4FC68;
-			remoteInfo = "MVVM-C";
-		};
-		6804C78C2CFDEEE400C4FC68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6804C7642CFDEEDF00C4FC68 /* Project object */;
 			proxyType = 1;
@@ -26,7 +24,6 @@
 /* Begin PBXFileReference section */
 		6804C76C2CFDEEDF00C4FC68 /* MVVM-C.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVM-C.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6804C7812CFDEEE400C4FC68 /* MVVM-CTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MVVM-CTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6804C78B2CFDEEE400C4FC68 /* MVVM-CUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MVVM-CUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,11 +37,6 @@
 			path = "MVVM-CTests";
 			sourceTree = "<group>";
 		};
-		6804C78E2CFDEEE400C4FC68 /* MVVM-CUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "MVVM-CUITests";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,17 +44,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68B9C1612CFFA5D800774E75 /* Storage in Frameworks */,
+				68B9C15E2CFFA5C700774E75 /* Network in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6804C77E2CFDEEE400C4FC68 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6804C7882CFDEEE400C4FC68 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -77,7 +64,6 @@
 			children = (
 				6804C76E2CFDEEDF00C4FC68 /* MVVM-C */,
 				6804C7842CFDEEE400C4FC68 /* MVVM-CTests */,
-				6804C78E2CFDEEE400C4FC68 /* MVVM-CUITests */,
 				6804C76D2CFDEEDF00C4FC68 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,7 +73,6 @@
 			children = (
 				6804C76C2CFDEEDF00C4FC68 /* MVVM-C.app */,
 				6804C7812CFDEEE400C4FC68 /* MVVM-CTests.xctest */,
-				6804C78B2CFDEEE400C4FC68 /* MVVM-CUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,6 +97,8 @@
 			);
 			name = "MVVM-C";
 			packageProductDependencies = (
+				68B9C15D2CFFA5C700774E75 /* Network */,
+				68B9C1602CFFA5D800774E75 /* Storage */,
 			);
 			productName = "MVVM-C";
 			productReference = 6804C76C2CFDEEDF00C4FC68 /* MVVM-C.app */;
@@ -140,29 +127,6 @@
 			productReference = 6804C7812CFDEEE400C4FC68 /* MVVM-CTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		6804C78A2CFDEEE400C4FC68 /* MVVM-CUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6804C79B2CFDEEE400C4FC68 /* Build configuration list for PBXNativeTarget "MVVM-CUITests" */;
-			buildPhases = (
-				6804C7872CFDEEE400C4FC68 /* Sources */,
-				6804C7882CFDEEE400C4FC68 /* Frameworks */,
-				6804C7892CFDEEE400C4FC68 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6804C78D2CFDEEE400C4FC68 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				6804C78E2CFDEEE400C4FC68 /* MVVM-CUITests */,
-			);
-			name = "MVVM-CUITests";
-			packageProductDependencies = (
-			);
-			productName = "MVVM-CUITests";
-			productReference = 6804C78B2CFDEEE400C4FC68 /* MVVM-CUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -180,10 +144,6 @@
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = 6804C76B2CFDEEDF00C4FC68;
 					};
-					6804C78A2CFDEEE400C4FC68 = {
-						CreatedOnToolsVersion = 16.1;
-						TestTargetID = 6804C76B2CFDEEDF00C4FC68;
-					};
 				};
 			};
 			buildConfigurationList = 6804C7672CFDEEDF00C4FC68 /* Build configuration list for PBXProject "MVVM-C" */;
@@ -195,6 +155,10 @@
 			);
 			mainGroup = 6804C7632CFDEEDF00C4FC68;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				68B9C15C2CFFA5C700774E75 /* XCLocalSwiftPackageReference "../Network" */,
+				68B9C15F2CFFA5D800774E75 /* XCLocalSwiftPackageReference "../Storage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6804C76D2CFDEEDF00C4FC68 /* Products */;
 			projectDirPath = "";
@@ -202,7 +166,6 @@
 			targets = (
 				6804C76B2CFDEEDF00C4FC68 /* MVVM-C */,
 				6804C7802CFDEEE400C4FC68 /* MVVM-CTests */,
-				6804C78A2CFDEEE400C4FC68 /* MVVM-CUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -216,13 +179,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6804C77F2CFDEEE400C4FC68 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6804C7892CFDEEE400C4FC68 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -246,13 +202,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6804C7872CFDEEE400C4FC68 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -260,11 +209,6 @@
 			isa = PBXTargetDependency;
 			target = 6804C76B2CFDEEDF00C4FC68 /* MVVM-C */;
 			targetProxy = 6804C7822CFDEEE400C4FC68 /* PBXContainerItemProxy */;
-		};
-		6804C78D2CFDEEE400C4FC68 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6804C76B2CFDEEDF00C4FC68 /* MVVM-C */;
-			targetProxy = 6804C78C2CFDEEE400C4FC68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -395,7 +339,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MVVM-C/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = D33JH92744;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -411,6 +355,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "james.wolfe.MVVM-C";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -424,7 +372,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MVVM-C/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = D33JH92744;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -440,6 +388,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "james.wolfe.MVVM-C";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -458,6 +410,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "james.wolfe.MVVM-CTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -477,44 +433,14 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "james.wolfe.MVVM-CTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MVVM-C.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MVVM-C";
-			};
-			name = Release;
-		};
-		6804C79C2CFDEEE400C4FC68 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D33JH92744;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "james.wolfe.MVVM-CUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "MVVM-C";
-			};
-			name = Debug;
-		};
-		6804C79D2CFDEEE400C4FC68 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D33JH92744;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "james.wolfe.MVVM-CUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "MVVM-C";
 			};
 			name = Release;
 		};
@@ -548,16 +474,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6804C79B2CFDEEE400C4FC68 /* Build configuration list for PBXNativeTarget "MVVM-CUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6804C79C2CFDEEE400C4FC68 /* Debug */,
-				6804C79D2CFDEEE400C4FC68 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		68B9C15C2CFFA5C700774E75 /* XCLocalSwiftPackageReference "../Network" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Network;
+		};
+		68B9C15F2CFFA5D800774E75 /* XCLocalSwiftPackageReference "../Storage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Storage;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		68B9C15D2CFFA5C700774E75 /* Network */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Network;
+		};
+		68B9C1602CFFA5D800774E75 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6804C7642CFDEEDF00C4FC68 /* Project object */;
 }

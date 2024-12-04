@@ -1,0 +1,41 @@
+{
+  "configurations" : [
+    {
+      "id" : "35F1A570-1C3E-4811-A9EA-8EF33DDC19B7",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:..\/Network",
+        "identifier" : "NetworkTests",
+        "name" : "NetworkTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:..\/Storage",
+        "identifier" : "StorageTests",
+        "name" : "StorageTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:MVVM-C.xcodeproj",
+        "identifier" : "6804C7802CFDEEE400C4FC68",
+        "name" : "MVVM-CTests"
+      }
+    }
+  ],
+  "version" : 1
+}

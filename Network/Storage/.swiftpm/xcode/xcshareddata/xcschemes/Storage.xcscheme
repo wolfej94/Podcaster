@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Network"
-               BuildableName = "Network"
-               BlueprintName = "Network"
+               BlueprintIdentifier = "Storage"
+               BuildableName = "Storage"
+               BlueprintName = "Storage"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,10 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:.swiftpm/Network.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:../Podcaster Tests.xctestplan"
+            reference = "container:Sources/Storage.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -42,9 +39,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NetworkTests"
-               BuildableName = "NetworkTests"
-               BlueprintName = "NetworkTests"
+               BlueprintIdentifier = "StorageTests"
+               BuildableName = "StorageTests"
+               BlueprintName = "StorageTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -70,9 +67,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Network"
-            BuildableName = "Network"
-            BlueprintName = "Network"
+            BlueprintIdentifier = "Storage"
+            BuildableName = "Storage"
+            BlueprintName = "Storage"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
