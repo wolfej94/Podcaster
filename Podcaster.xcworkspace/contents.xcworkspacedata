@@ -75,6 +75,20 @@
          location = "group:MVC"
          name = "MVC">
          <Group
+            location = "group:Features"
+            name = "Features">
+            <Group
+               location = "group:View"
+               name = "View">
+               <FileRef
+                  location = "group:ViewController.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:View.xib">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
             location = "group:Configuration"
             name = "Configuration">
          </Group>
@@ -94,12 +108,6 @@
                location = "group:SceneDelegate.swift">
             </FileRef>
          </Group>
-         <FileRef
-            location = "group:ViewController.swift">
-         </FileRef>
-         <FileRef
-            location = "group:View.xib">
-         </FileRef>
       </Group>
       <FileRef
          location = "group:MVC.xcodeproj">
@@ -157,6 +165,40 @@
          location = "group:MVVM-C"
          name = "MVVM-C">
          <Group
+            location = "group:Features"
+            name = "Features">
+            <Group
+               location = "group:Common"
+               name = "Common">
+               <FileRef
+                  location = "group:ViewModel.swift">
+               </FileRef>
+               <Group
+                  location = "group:Commands"
+                  name = "Commands">
+                  <FileRef
+                     location = "group:Command.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:AsyncCommand.swift">
+                  </FileRef>
+               </Group>
+            </Group>
+            <Group
+               location = "group:Content"
+               name = "Content">
+               <FileRef
+                  location = "group:ContentCoordinator.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:ContentViewModel.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:ContentView.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
             location = "group:App"
             name = "App">
             <FileRef
@@ -170,9 +212,6 @@
             location = "group:Configuration"
             name = "Configuration">
          </Group>
-         <FileRef
-            location = "group:ContentView.swift">
-         </FileRef>
       </Group>
       <Group
          location = "group:MVVM-CTests"

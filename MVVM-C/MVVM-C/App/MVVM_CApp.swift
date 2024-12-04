@@ -12,7 +12,7 @@ struct MVVM_CApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentCoordinator()
         }
     }
 }

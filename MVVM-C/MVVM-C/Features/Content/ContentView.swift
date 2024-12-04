@@ -9,11 +9,14 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+
+    @State var viewModel: ContentViewModel
+
     var body: some View {
         Text("Hello World")
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: ContentViewModel())
 }
