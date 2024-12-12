@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import MVVM
+import MVVM
 
 struct MVVMTests {
 

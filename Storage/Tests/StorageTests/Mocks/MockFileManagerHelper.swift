@@ -40,7 +40,7 @@ final class MockFileManagerHelper: FileManagerHelper {
             .eraseToAnyPublisher()
     }
     
-    func cleanUpFiles(for episode: Storage.Episode) throws {
+    func cleanUpFiles(for episode: Storage.EpisodeViewModel) throws {
         cleanupFilesCalled = true
     }
 

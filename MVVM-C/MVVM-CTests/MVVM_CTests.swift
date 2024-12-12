@@ -6,7 +6,7 @@
 //
 
 import Testing
-@testable import MVVM_C
+import MVVM_C
 
 struct MVVM_CTests {
 

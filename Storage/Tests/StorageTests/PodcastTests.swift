@@ -342,10 +342,11 @@ extension PodcastTests {
 extension PodcastTests {
     struct TestData {
         // MARK: - Shared Data
-        static let podcast = Podcast.init(id: 1,
-                                          image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
-                                          podcastDescription: "",
-                                          episodes: []
+        static let podcast = PodcastViewModel(id: 1,
+                                              title: "Test",
+                                              image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
+                                              podcastDescription: "",
+                                              episodes: []
         )
 
         // MARK: - Errors

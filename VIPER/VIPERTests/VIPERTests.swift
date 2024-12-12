@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VIPER
+import VIPER
 
 final class VIPERTests: XCTestCase {
 

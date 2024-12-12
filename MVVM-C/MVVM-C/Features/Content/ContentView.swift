@@ -18,5 +18,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(viewModel: ContentViewModel())
+    ContentView(viewModel: ContentViewModel(actionHandler: { _ in }))
 }
