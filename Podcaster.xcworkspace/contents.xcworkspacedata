@@ -59,9 +59,6 @@
             location = "group:Configuration"
             name = "Configuration">
             <FileRef
-               location = "group:Configuration.swift">
-            </FileRef>
-            <FileRef
                location = "group:Develop.xcconfig">
             </FileRef>
             <FileRef
@@ -103,9 +100,6 @@
          <Group
             location = "group:Configuration"
             name = "Configuration">
-            <FileRef
-               location = "group:Configuration.swift">
-            </FileRef>
             <FileRef
                location = "group:Develop.xcconfig">
             </FileRef>
@@ -187,9 +181,6 @@
          <Group
             location = "group:Configuration"
             name = "Configuration">
-            <FileRef
-               location = "group:Configuration.swift">
-            </FileRef>
             <FileRef
                location = "group:Develop.xcconfig">
             </FileRef>
@@ -275,9 +266,6 @@
          <Group
             location = "group:Configuration"
             name = "Configuration">
-            <FileRef
-               location = "group:Configuration.swift">
-            </FileRef>
             <FileRef
                location = "group:Develop.xcconfig">
             </FileRef>
