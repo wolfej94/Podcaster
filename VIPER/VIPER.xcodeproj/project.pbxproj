@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		681D22622CFFE880001B8352 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 681D22612CFFE880001B8352 /* Network */; };
-		681D22652CFFE887001B8352 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 681D22642CFFE887001B8352 /* Storage */; };
+		68979A522D0082DF00413185 /* Repository in Frameworks */ = {isa = PBXBuildFile; productRef = 68979A512D0082DF00413185 /* Repository */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,8 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				681D22652CFFE887001B8352 /* Storage in Frameworks */,
-				681D22622CFFE880001B8352 /* Network in Frameworks */,
+				68979A522D0082DF00413185 /* Repository in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,8 +114,7 @@
 			);
 			name = VIPER;
 			packageProductDependencies = (
-				681D22612CFFE880001B8352 /* Network */,
-				681D22642CFFE887001B8352 /* Storage */,
+				68979A512D0082DF00413185 /* Repository */,
 			);
 			productName = VIPER;
 			productReference = 681D214D2CFFE077001B8352 /* VIPER.app */;
@@ -175,8 +172,7 @@
 			mainGroup = 681D21442CFFE077001B8352;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				681D22602CFFE880001B8352 /* XCLocalSwiftPackageReference "../Network" */,
-				681D22632CFFE887001B8352 /* XCLocalSwiftPackageReference "../Storage" */,
+				68979A502D0082DF00413185 /* XCLocalSwiftPackageReference "../Repository" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 681D214E2CFFE077001B8352 /* Products */;
@@ -609,24 +605,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		681D22602CFFE880001B8352 /* XCLocalSwiftPackageReference "../Network" */ = {
+		68979A502D0082DF00413185 /* XCLocalSwiftPackageReference "../Repository" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Network;
-		};
-		681D22632CFFE887001B8352 /* XCLocalSwiftPackageReference "../Storage" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Storage;
+			relativePath = ../Repository;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		681D22612CFFE880001B8352 /* Network */ = {
+		68979A512D0082DF00413185 /* Repository */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Network;
-		};
-		681D22642CFFE887001B8352 /* Storage */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Storage;
+			productName = Repository;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

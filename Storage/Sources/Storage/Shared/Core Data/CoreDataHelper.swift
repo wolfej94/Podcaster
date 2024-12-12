@@ -12,15 +12,15 @@ typealias CoreDataHelper = SynchronousCoreDataHelper & AsyncCoreDataHelper & Clo
 internal struct DefaultCoreDataHelper: SynchronousCoreDataHelper {
 
     func fetchManagedObject<T: NSManagedObject>(ofType type: T.Type,
-                                                byID id: String,
+                                                byID id: Int64,
                                                 in context: NSManagedObjectContext) throws -> T? {
         let fetchRequest = T.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id = %@", id)
+        fetchRequest.predicate = NSPredicate(format: "id = %@", String(id))
         return try context.fetch(fetchRequest as! NSFetchRequest<T>).first
     }
 
     func fetchManagedObjects<T: NSManagedObject>(ofType type: T.Type,
-                                                 byIDs ids: [String]?,
+                                                 byIDs ids: [Int64]?,
                                                  in context: NSManagedObjectContext) throws -> [T] {
         let fetchRequest = T.fetchRequest()
         if let ids {
@@ -30,7 +30,7 @@ internal struct DefaultCoreDataHelper: SynchronousCoreDataHelper {
     }
 
     func fetchObjectIDs<T: NSManagedObject>(ofType type: T.Type,
-                                            for ids: [String],
+                                            for ids: [Int64],
                                             in context: NSManagedObjectContext) throws -> [NSManagedObjectID] {
         return try ids.compactMap { id in
             try fetchManagedObject(ofType: type, byID: id, in: context)?.objectID
@@ -45,6 +45,7 @@ extension DefaultCoreDataHelper: AsyncCoreDataHelper {
     func batchInsert(entityName: String,
                      objects: [[String: Any]],
                      in context: NSManagedObjectContext) async throws {
+        guard objects.isEmpty == false else { return }
         try await withCheckedThrowingContinuation { continuation in
             context.performAndWait {
                 do {

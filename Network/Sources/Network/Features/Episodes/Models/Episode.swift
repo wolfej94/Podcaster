@@ -9,14 +9,14 @@ import Foundation
 
 public struct Episode: Codable, Sendable, Identifiable, Equatable {
     public let id: String
-    let audio: URL
-    let image: URL
-    let title: String
-    let thumbnail: URL
-    let summary: String
-    let pubDateMS: Date
-    let audioLengthSEC: Int
-    let explicitContent: Bool
+    public let audio: URL
+    public let image: URL
+    public let title: String
+    public let thumbnail: URL
+    public let summary: String
+    public let pubDateMS: Date
+    public let audioLengthSEC: Int
+    public let explicitContent: Bool
 
     enum CodingKeys: String, CodingKey {
         case id

@@ -1,0 +1,15 @@
+{
+  "originHash" : "48b2006c514d260cbcea4b3fdb8bc96396ef2fa6e128228a2493a85978af9fd9",
+  "pins" : [
+    {
+      "identity" : "podcastindexkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SparrowTek/PodcastIndexKit",
+      "state" : {
+        "revision" : "23c5d78db7911a993fc845c9feacc0d1cde6b05b",
+        "version" : "0.4.1"
+      }
+    }
+  ],
+  "version" : 3
+}

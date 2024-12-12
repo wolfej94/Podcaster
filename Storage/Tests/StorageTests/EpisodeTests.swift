@@ -975,41 +975,25 @@ extension EpisodesTests {
 extension EpisodesTests {
     struct TestData {
         // MARK: - Shared Data
-        static let podcast: Podcast = Podcast(
-            id: "",
-            email: "",
-            image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
-            title: "",
-            country: "",
-            website: nil,
-            language: "",
-            genres: [],
-            publisher: "",
-            thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-            summary: "",
-            listenScore: .zero,
-            totalEpisodes: .zero,
-            explicitContent: false,
-            latestEpisodeID: "",
-            latestPubDateMS: nil,
-            earliestPubDateMS: nil,
-            updateFrequencyHours: .zero,
-            listenScoreGlobalRank: "",
-            episodes: [episode]
+        static let podcast: Podcast = Podcast.init(id: 1,
+                                                   title: "",
+                                                   image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
+                                                   podcastDescription: "",
+                                                   episodes: [episode]
         )
-        static let episode: Episode = Episode(
-            id: "",
-            audio: URL(string: "https://download.samplelib.com/mp3/sample-3s.mp3")!,
-            image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
-            title: "",
-            thumbnail: URL(string: "https://picsum.photos/seed/picsum/50/50")!,
-            summary: "",
-            pubDateMS: nil,
-            audioLengthSEC: .zero,
-            explicitContent: false,
-            availableOffline: false
+
+        static let episode: Episode = Episode(id: 1,
+                                              title: "",
+                                              audioLengthSEC: .zero,
+                                              explicitContent: false,
+                                              guid: "",
+                                              datePublished: nil,
+                                              episodeNumber: 1,
+                                              enclosedURL: URL(string: "https://download.samplelib.com/mp3/sample-3s.mp3")!,
+                                              season: 1,
+                                              image: URL(string: "https://picsum.photos/seed/picsum/200/300")!
         )
-        
+
         // MARK: - Download Data
         static let successfulDownloadResponse = HTTPURLResponse(
             url: URL(string: "https://download.samplelib.com/mp3/sample-3s.mp3")!,

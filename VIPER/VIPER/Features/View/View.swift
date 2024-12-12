@@ -27,4 +27,8 @@ class View: UIViewController, ViewProtocol {
         presenter?.viewDidLoad()
     }
 
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        presenter?.didTapButton()
+    }
+
 }

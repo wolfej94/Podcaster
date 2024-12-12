@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24B83" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="EpisodeStorageObject" representedClassName="EpisodeStorageObject" syncable="YES">
-        <attribute name="audio" optional="YES" attributeType="URI"/>
-        <attribute name="audioLengthSEC" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="availabileOffline" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="audioLengthSEC" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="availableOffline" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="datePublished" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="enclosedURL" optional="YES" attributeType="URI"/>
+        <attribute name="episodeNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="explicitContent" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="guid" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="URI"/>
-        <attribute name="pubDateMS" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="summary" optional="YES" attributeType="String"/>
-        <attribute name="thumbnail" optional="YES" attributeType="URI"/>
+        <attribute name="season" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PodcastStorageObject" inverseName="episodes" inverseEntity="PodcastStorageObject"/>
         <uniquenessConstraints>
@@ -18,31 +19,12 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="GenreStorageObject" representedClassName="GenreStorageObject" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PodcastStorageObject" inverseName="genres" inverseEntity="PodcastStorageObject"/>
-    </entity>
     <entity name="PodcastStorageObject" representedClassName="PodcastStorageObject" syncable="YES">
-        <attribute name="country" attributeType="String"/>
-        <attribute name="earliestPubDateMS" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="explicitContent" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" attributeType="URI"/>
-        <attribute name="language" attributeType="String"/>
-        <attribute name="latestEpisodeID" attributeType="String"/>
-        <attribute name="latestPubDateMS" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="listenScore" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="listenScoreGlobalRank" attributeType="String"/>
-        <attribute name="publisher" attributeType="String"/>
-        <attribute name="summary" attributeType="String"/>
-        <attribute name="thumbnail" attributeType="URI"/>
+        <attribute name="podcastDescription" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
-        <attribute name="totalEpisodes" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="updateFrequencyHours" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="website" attributeType="URI"/>
         <relationship name="episodes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EpisodeStorageObject" inverseName="podcast" inverseEntity="EpisodeStorageObject"/>
-        <relationship name="genres" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GenreStorageObject" inverseName="podcast" inverseEntity="GenreStorageObject"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

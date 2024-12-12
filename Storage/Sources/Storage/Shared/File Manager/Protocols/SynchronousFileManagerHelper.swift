@@ -9,6 +9,6 @@ import Foundation
 
 internal protocol SynchronousFileManagerHelper {
 
-    func cleanUpFiles(for episode: Episode) throws
+    func cleanUpFiles(for episode: EpisodeViewModel) throws
 
 }

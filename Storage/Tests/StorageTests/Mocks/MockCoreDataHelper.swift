@@ -85,21 +85,21 @@ final class MockCoreDataHelper: CoreDataHelper {
             .eraseToAnyPublisher()
     }
     
-    func fetchObjectIDs<T>(ofType type: T.Type, for ids: [String], in context: NSManagedObjectContext) throws -> [NSManagedObjectID] where T : NSManagedObject {
+    func fetchObjectIDs<T>(ofType type: T.Type, for ids: [Int64], in context: NSManagedObjectContext) throws -> [NSManagedObjectID] where T : NSManagedObject {
         if let errorToThrowForFetchObjectIDs {
             throw errorToThrowForFetchObjectIDs
         }
         return dataToReturnForFetchObjectIDs ?? []
     }
     
-    func fetchManagedObject<T>(ofType type: T.Type, byID id: String, in context: NSManagedObjectContext) throws -> T? where T : NSManagedObject {
+    func fetchManagedObject<T>(ofType type: T.Type, byID id: Int64, in context: NSManagedObjectContext) throws -> T? where T : NSManagedObject {
         if let errorToThrowForFetchObject {
             throw errorToThrowForFetchObject
         }
         return dataToReturnForFetchObject as? T
     }
     
-    func fetchManagedObjects<T>(ofType type: T.Type, byIDs ids: [String]?, in context: NSManagedObjectContext) throws -> [T] where T : NSManagedObject {
+    func fetchManagedObjects<T>(ofType type: T.Type, byIDs ids: [Int64]?, in context: NSManagedObjectContext) throws -> [T] where T : NSManagedObject {
         if let errorToThrowForFetchObjects {
             throw errorToThrowForFetchObjects
         }

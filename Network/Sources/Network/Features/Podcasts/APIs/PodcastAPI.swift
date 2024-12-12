@@ -9,56 +9,67 @@ import Foundation
 
 internal enum PodcastAPI: API {
 
-    case popular(page: Int, apiKey: String)
-    case search(query: String, page: Int, apiKey: String)
-    case recommended(basedOn: Podcast, page: Int, apiKey: String)
+    case popular(page: Int, apiKey: String, secret: String, appName: String, appVersion: String)
+    case search(query: String, page: Int, apiKey: String, secret: String, appName: String, appVersion: String)
+
+    internal var apiKey: String {
+        switch self {
+        case .popular(_, let apiKey, _, _, _),
+                .search(_, _, let apiKey, _, _, _):
+            return apiKey
+        }
+    }
+
+    internal var secret: String {
+        switch self {
+        case .popular(_, _, let secret, _, _),
+                .search(_, _, _, let secret, _, _):
+            return secret
+        }
+    }
+
+    internal var userAgent: String {
+        switch self {
+        case .popular(_, _, _, let appName, let appVersion),
+                .search(_, _, _, _, let appName, let appVersion):
+            return [appName, appVersion].joined(separator: "/")
+        }
+    }
 
     private var url: URL {
-        return switch self {
-        case .popular(let page, _):
-            Configuration.baseURL
-                .appending(path: "best_podcasts")
+        switch self {
+        case .popular(let page, _, _, _, _):
+            return Configuration.baseURL
+                .appending(path: "podcasts/trending")
                 .appending(queryItems: [
-                    URLQueryItem(name: "page", value: String(page)),
-                    URLQueryItem(name: "sort", value: "listen_score"),
-                    URLQueryItem(name: "safe_mode", value: "0")
+                    URLQueryItem(name: "max", value: "20"),
+                    URLQueryItem(name: "page", value: String(page))
                 ])
-        case .search(let query, let page, _):
-            Configuration.baseURL
-                .appending(path: "search")
+        case .search(let query, let page, _, _, _, _):
+            return Configuration.baseURL
+                .appending(path: "search/byterm")
                 .appending(queryItems: [
                     URLQueryItem(name: "q", value: query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)),
-                    URLQueryItem(name: "safe_mode", value: "0"),
-                    URLQueryItem(name: "page", value: String(page)),
-                ])
-        case .recommended(let basedOn, let page, _):
-            Configuration.baseURL
-                .appending(path: "podcasts/\(basedOn.id)/recommendations")
-                .appending(queryItems: [
-                    URLQueryItem(name: "safe_mode", value: "0"),
-                    URLQueryItem(name: "page", value: String(page)),
+                    URLQueryItem(name: "max", value: "20"),
+                    URLQueryItem(name: "page", value: String(page))
                 ])
         }
     }
 
     private var method: String {
-        return switch self {
-        case .popular, .search, .recommended: "GET"
-        }
-    }
-
-    private var apiKey: String {
-        switch self {
-        case .popular(_, let apiKey), .search(_, _, let apiKey), .recommended(_, _, let apiKey):
-            return apiKey
-        }
+        return "GET"
     }
 
     var request: URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.addValue(apiKey, forHTTPHeaderField: "X-ListenAPI-Key")
+
+        let headers = generateHeaders()
+        for (key, value) in headers {
+            request.addValue(value, forHTTPHeaderField: key)
+        }
+
         return request
     }
-
 }
+

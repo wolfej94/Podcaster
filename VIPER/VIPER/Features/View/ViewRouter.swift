@@ -8,16 +8,20 @@
 import UIKit
 
 protocol ViewRouterProtocol: AnyObject {
-    // Define navigation methods
+    func showAlert()
 }
 
 class ViewRouter: ViewRouterProtocol {
-    static func createModule() -> UIViewController {
+
+    private weak var view: View!
+
+    static func build() -> View {
         let view = View()
         let presenter = ViewPresenter()
         let interactor = ViewInteractor()
         let router = ViewRouter()
 
+        router.view = view
         view.presenter = presenter
         presenter.view = view
         presenter.router = router
@@ -25,5 +29,10 @@ class ViewRouter: ViewRouterProtocol {
         interactor.presenter = presenter
 
         return view
+    }
+
+    func showAlert() {
+        let alert = UIAlertController(title: "Test", message: "Test", preferredStyle: .alert)
+        view.present(alert, animated: true)
     }
 }

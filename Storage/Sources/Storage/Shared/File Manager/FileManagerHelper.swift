@@ -11,8 +11,8 @@ import Combine
 typealias FileManagerHelper = SynchronousFileManagerHelper & AsyncFileManagerHelper & ClosureFileManagerHelper & CombineFileManagerHelper
 internal struct DefaultFileManagerHelper: SynchronousFileManagerHelper {
 
-    func cleanUpFiles(for episode: Episode) throws {
-        let urls = [episode.audio, episode.image, episode.thumbnail]
+    func cleanUpFiles(for episode: EpisodeViewModel) throws {
+        let urls = [episode.enclosedURL, episode.image]
         for url in urls {
             guard let url = url else { continue }
             let fileURL = URL.applicationSupportDirectory.appending(path: url.path(percentEncoded: false))
@@ -26,7 +26,9 @@ internal struct DefaultFileManagerHelper: SynchronousFileManagerHelper {
 extension DefaultFileManagerHelper: AsyncFileManagerHelper {
 
     func downloadFile(at networkURL: URL?, session: NetworkURLSession) async throws -> URL {
-        guard let networkURL = networkURL else { throw StorageError.missingURL }
+        guard let networkURL = networkURL else {
+            throw StorageError.missingURL
+        }
         let request = URLRequest(url: networkURL)
         let (data, response) = try await session.data(for: request, delegate: nil)
         guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {

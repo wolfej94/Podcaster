@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		68B9C15E2CFFA5C700774E75 /* Network in Frameworks */ = {isa = PBXBuildFile; productRef = 68B9C15D2CFFA5C700774E75 /* Network */; };
-		68B9C1612CFFA5D800774E75 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 68B9C1602CFFA5D800774E75 /* Storage */; };
+		68979A5B2D00831E00413185 /* Repository in Frameworks */ = {isa = PBXBuildFile; productRef = 68979A5A2D00831E00413185 /* Repository */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,8 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68B9C1612CFFA5D800774E75 /* Storage in Frameworks */,
-				68B9C15E2CFFA5C700774E75 /* Network in Frameworks */,
+				68979A5B2D00831E00413185 /* Repository in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,8 +108,7 @@
 			);
 			name = "MVVM-C";
 			packageProductDependencies = (
-				68B9C15D2CFFA5C700774E75 /* Network */,
-				68B9C1602CFFA5D800774E75 /* Storage */,
+				68979A5A2D00831E00413185 /* Repository */,
 			);
 			productName = "MVVM-C";
 			productReference = 6804C76C2CFDEEDF00C4FC68 /* MVVM-C.app */;
@@ -169,8 +166,7 @@
 			mainGroup = 6804C7632CFDEEDF00C4FC68;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				68B9C15C2CFFA5C700774E75 /* XCLocalSwiftPackageReference "../Network" */,
-				68B9C15F2CFFA5D800774E75 /* XCLocalSwiftPackageReference "../Storage" */,
+				68979A592D00831E00413185 /* XCLocalSwiftPackageReference "../Repository" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6804C76D2CFDEEDF00C4FC68 /* Products */;
@@ -621,24 +617,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		68B9C15C2CFFA5C700774E75 /* XCLocalSwiftPackageReference "../Network" */ = {
+		68979A592D00831E00413185 /* XCLocalSwiftPackageReference "../Repository" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Network;
-		};
-		68B9C15F2CFFA5D800774E75 /* XCLocalSwiftPackageReference "../Storage" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Storage;
+			relativePath = ../Repository;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		68B9C15D2CFFA5C700774E75 /* Network */ = {
+		68979A5A2D00831E00413185 /* Repository */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Network;
-		};
-		68B9C1602CFFA5D800774E75 /* Storage */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Storage;
+			productName = Repository;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

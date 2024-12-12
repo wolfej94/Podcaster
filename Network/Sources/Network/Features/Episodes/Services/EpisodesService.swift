@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 /// The `EpisodesService` protocol defines the methods for fetching episodes associated with a podcast.
-internal protocol EpisodesService {
+public protocol EpisodesService {
 
     /// Asynchronous method to fetch episodes for a given podcast.
     /// - Parameter podcast: The `Podcast` object for which to fetch the episodes.

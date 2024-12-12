@@ -11,13 +11,6 @@
          location = "group:VIPER.xcodeproj">
       </FileRef>
       <Group
-         location = "group:VIPERTests"
-         name = "VIPERTests">
-         <FileRef
-            location = "group:VIPERTests.swift">
-         </FileRef>
-      </Group>
-      <Group
          location = "group:VIPER"
          name = "VIPER">
          <Group
@@ -78,6 +71,13 @@
                location = "group:UAT.xcconfig">
             </FileRef>
          </Group>
+      </Group>
+      <Group
+         location = "group:VIPERTests"
+         name = "VIPERTests">
+         <FileRef
+            location = "group:VIPERTests.swift">
+         </FileRef>
       </Group>
    </Group>
    <Group
@@ -151,13 +151,6 @@
          location = "group:MVVM.xcodeproj">
       </FileRef>
       <Group
-         location = "group:MVVMTests"
-         name = "MVVMTests">
-         <FileRef
-            location = "group:MVVMTests.swift">
-         </FileRef>
-      </Group>
-      <Group
          location = "group:MVVM"
          name = "MVVM">
          <Group
@@ -217,6 +210,13 @@
                location = "group:MVVMApp.swift">
             </FileRef>
          </Group>
+      </Group>
+      <Group
+         location = "group:MVVMTests"
+         name = "MVVMTests">
+         <FileRef
+            location = "group:MVVMTests.swift">
+         </FileRef>
       </Group>
    </Group>
    <Group
@@ -298,9 +298,9 @@
       </Group>
    </Group>
    <FileRef
-      location = "group:Storage">
+      location = "container:Repository">
    </FileRef>
    <FileRef
-      location = "group:Network">
+      location = "group:Storage">
    </FileRef>
 </Workspace>

@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 /// Protocol defining a podcast service with multiple methods for fetching podcast data.
-internal protocol PodcastService {
+public protocol PodcastService {
 
     // MARK: - Async/Await Methods
 

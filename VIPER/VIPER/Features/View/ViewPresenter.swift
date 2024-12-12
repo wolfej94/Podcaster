@@ -9,6 +9,7 @@ import Foundation
 
 protocol ViewPresenterProtocol: AnyObject {
     func viewDidLoad()
+    func didTapButton()
 }
 
 class ViewPresenter: ViewPresenterProtocol {
@@ -18,5 +19,9 @@ class ViewPresenter: ViewPresenterProtocol {
 
     func viewDidLoad() {
         
+    }
+
+    func didTapButton() {
+        router?.showAlert()
     }
 }

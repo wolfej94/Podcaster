@@ -10,15 +10,15 @@ import CoreData
 internal protocol SynchronousCoreDataHelper {
 
     func fetchObjectIDs<T: NSManagedObject>(ofType type: T.Type,
-                                            for ids: [String],
+                                            for ids: [Int64],
                                             in context: NSManagedObjectContext) throws -> [NSManagedObjectID]
 
     func fetchManagedObject<T: NSManagedObject>(ofType type: T.Type,
-                                                byID id: String,
+                                                byID id: Int64,
                                                 in context: NSManagedObjectContext) throws -> T?
 
     func fetchManagedObjects<T: NSManagedObject>(ofType type: T.Type,
-                                                 byIDs ids: [String]?,
+                                                 byIDs ids: [Int64]?,
                                                  in context: NSManagedObjectContext) throws -> [T]
 
 }
