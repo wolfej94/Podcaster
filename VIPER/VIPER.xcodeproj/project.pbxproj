@@ -50,11 +50,6 @@
 			path = VIPERTests;
 			sourceTree = "<group>";
 		};
-		681D21702CFFE078001B8352 /* VIPERUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VIPERUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +77,6 @@
 			children = (
 				681D214F2CFFE077001B8352 /* VIPER */,
 				681D21662CFFE078001B8352 /* VIPERTests */,
-				681D21702CFFE078001B8352 /* VIPERUITests */,
 				681D214E2CFFE077001B8352 /* Products */,
 			);
 			sourceTree = "<group>";
