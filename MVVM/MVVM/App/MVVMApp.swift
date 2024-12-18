@@ -11,9 +11,7 @@ import SwiftUI
 struct MVVMApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                ContentView(viewModel: ContentViewModel())
-            }
+            TabBarView()
         }
     }
 }

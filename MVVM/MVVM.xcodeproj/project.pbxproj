@@ -49,11 +49,6 @@
 			path = MVVMTests;
 			sourceTree = "<group>";
 		};
-		681D20B22CFFE020001B8352 /* MVVMUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MVVMUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +75,6 @@
 			children = (
 				681D20972CFFE01E001B8352 /* MVVM */,
 				681D20A82CFFE020001B8352 /* MVVMTests */,
-				681D20B22CFFE020001B8352 /* MVVMUITests */,
 				681D20962CFFE01E001B8352 /* Products */,
 			);
 			sourceTree = "<group>";
