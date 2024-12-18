@@ -49,11 +49,6 @@
 			path = MVCTests;
 			sourceTree = "<group>";
 		};
-		681D21332CFFE05C001B8352 /* MVCUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MVCUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +75,6 @@
 			children = (
 				681D21122CFFE05A001B8352 /* MVC */,
 				681D21292CFFE05C001B8352 /* MVCTests */,
-				681D21332CFFE05C001B8352 /* MVCUITests */,
 				681D21112CFFE05A001B8352 /* Products */,
 			);
 			sourceTree = "<group>";

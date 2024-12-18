@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TabBarViewController.swift
 //  MVC
 //
 //  Created by James Wolfe on 04/12/2024.
@@ -7,10 +7,11 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class TabBarViewController: UITabBarController {
 
     init() {
-        super.init(nibName: "View", bundle: .main)
+        super.init(nibName: nil, bundle: .main)
+        setViewControllers([HomeViewController(), SearchViewController()], animated: false)
     }
     
     required init?(coder: NSCoder) {
@@ -19,7 +20,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
 
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="MVC" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="iN0-l3-epB" id="iPh-La-tuk"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lzU-Qa-jmg">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="818"/>
+                    <color key="backgroundColor" systemColor="systemRedColor"/>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="lzU-Qa-jmg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="8Jm-dC-S9I"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="lzU-Qa-jmg" secondAttribute="bottom" id="NQj-Pj-UcJ"/>
+                <constraint firstItem="lzU-Qa-jmg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="PrK-4Z-9Lt"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="lzU-Qa-jmg" secondAttribute="trailing" id="WOa-gx-J7b"/>
+            </constraints>
+            <point key="canvasLocation" x="24" y="20"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
