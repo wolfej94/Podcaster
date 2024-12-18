@@ -21,7 +21,7 @@ public struct PodcastViewModel: WebObject {
         self.title = podcast.title
         self.image = podcast.image
         self.podcastDescription = podcast.podcastDescription
-        self.episodes = podcast.episodes?.map { EpisodeViewModel(from: $0) } ?? []
+        self.episodes = (podcast.episodes as? Set<EpisodeStorageObject>)?.map { EpisodeViewModel(from: $0) } ?? []
     }
 
     public init(id: Int64, title: String?, image: URL?, podcastDescription: String?, episodes: [EpisodeViewModel]) {

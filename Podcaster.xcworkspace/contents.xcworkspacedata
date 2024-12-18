@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <FileRef
-      location = "group:Podcaster Tests.xctestplan">
-   </FileRef>
    <Group
       location = "group:VIPER"
       name = "VIPER">
@@ -68,6 +65,9 @@
                location = "group:UAT.xcconfig">
             </FileRef>
          </Group>
+         <FileRef
+            location = "group:ViewController.swift">
+         </FileRef>
       </Group>
       <Group
          location = "group:VIPERTests"
@@ -285,6 +285,9 @@
          </FileRef>
       </Group>
    </Group>
+   <FileRef
+      location = "group:Package Tests.xctestplan">
+   </FileRef>
    <FileRef
       location = "container:Repository">
    </FileRef>

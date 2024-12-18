@@ -30,6 +30,9 @@ public final class DefaultStorageService: StorageService, @unchecked Sendable {
                 fatalError("Unresolved error \(error)")
             }
         }
+        for entity in container.managedObjectModel.entities {
+            print("Entity: \(entity.name ?? "Unnamed"), Class: \(entity.managedObjectClassName ?? "No Class")")
+        }
         container.viewContext.automaticallyMergesChangesFromParent = true
         backgroundContext = container.newBackgroundContext()
         backgroundContext.automaticallyMergesChangesFromParent = true

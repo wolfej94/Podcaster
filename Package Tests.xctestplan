@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "C64879F6-EBFE-41D4-BB00-826659DDD1D1",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:Repository",
+        "identifier" : "RepositoryTests",
+        "name" : "RepositoryTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:Storage",
+        "identifier" : "StorageTests",
+        "name" : "StorageTests"
+      }
+    }
+  ],
+  "version" : 1
+}

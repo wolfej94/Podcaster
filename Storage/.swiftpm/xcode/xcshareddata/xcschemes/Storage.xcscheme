@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:../Podcaster Tests.xctestplan"
+            reference = "container:.swiftpm/Storage.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

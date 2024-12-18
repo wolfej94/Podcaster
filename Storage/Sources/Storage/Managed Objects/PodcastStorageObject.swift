@@ -12,10 +12,10 @@ import CoreData
 internal class PodcastStorageObject: NSManagedObject, @unchecked Sendable {
 
     @NSManaged public var id: Int64
-    @NSManaged public var title: String?
     @NSManaged public var image: URL?
     @NSManaged public var podcastDescription: String?
-    @NSManaged public var episodes: Set<EpisodeStorageObject>?
+    @NSManaged public var title: String?
+    @NSManaged public var episodes: NSSet?
 
     convenience init(podcast:PodcastViewModel, context: NSManagedObjectContext) {
         self.init(context: context)
@@ -24,7 +24,11 @@ internal class PodcastStorageObject: NSManagedObject, @unchecked Sendable {
         self.title = podcast.title
         self.image = podcast.image
         self.podcastDescription = podcast.podcastDescription
-        self.episodes = Set<EpisodeStorageObject>(podcast.episodes.map { EpisodeStorageObject(episode: $0, context: context) })
+        podcast.episodes.forEach {
+            let episode = EpisodeStorageObject(episode: $0, context: context)
+            episode.podcast = self
+            self.addToEpisodes(episode)
+        }
     }
 }
 

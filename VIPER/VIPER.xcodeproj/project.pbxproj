@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68979A522D0082DF00413185 /* Repository in Frameworks */ = {isa = PBXBuildFile; productRef = 68979A512D0082DF00413185 /* Repository */; };
+		68E36B282D132FF200B0D6A8 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 68E36B272D132FF200B0D6A8 /* Storage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68E36B282D132FF200B0D6A8 /* Storage in Frameworks */,
 				68979A522D0082DF00413185 /* Repository in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,6 +117,7 @@
 			name = VIPER;
 			packageProductDependencies = (
 				68979A512D0082DF00413185 /* Repository */,
+				68E36B272D132FF200B0D6A8 /* Storage */,
 			);
 			productName = VIPER;
 			productReference = 681D214D2CFFE077001B8352 /* VIPER.app */;
@@ -615,6 +618,10 @@
 		68979A512D0082DF00413185 /* Repository */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Repository;
+		};
+		68E36B272D132FF200B0D6A8 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

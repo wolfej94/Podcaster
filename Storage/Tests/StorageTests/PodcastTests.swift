@@ -31,7 +31,6 @@ final class PodcastTests {
 
     let coreData: MockCoreDataHelper
     let subject: DefaultStorageService
-    let context: NSManagedObjectContext
     var cancellables = Set<AnyCancellable>()
 
     init() {
@@ -39,7 +38,6 @@ final class PodcastTests {
         self.coreData = MockCoreDataHelper()
         self.subject = DefaultStorageService(fileManager: fileManager,
                                                              coreData: coreData)
-        self.context = subject.container.viewContext
     }
 
 }
@@ -63,7 +61,7 @@ extension PodcastTests {
           .tags(Tag.PodcastTestTag.sync, Tag.PodcastTestTag.read)
     )
     func dataReturnedThrowWhenFetchPodcastsSucceeds() throws {
-        coreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast, context: context)]
+        coreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast, context: subject.container.viewContext)]
         let podcast = try subject.read().first
         #expect(podcast?.id == TestData.podcast.id)
     }
@@ -77,7 +75,7 @@ extension PodcastTests {
     )
     func asyncCreateThrowsWhenBatchInsertFails() async throws {
         coreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
-                                                                       context: context)
+                                                                       context: subject.container.viewContext)
         coreData.errorToThrowForBatchInsert = TestData.Error.generic
         do {
             _ = try await subject.create([TestData.podcast])
@@ -92,7 +90,7 @@ extension PodcastTests {
     )
     func asyncCreateDoesNotThrowWhenCreatePodcastsSucceeds() async throws {
         coreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast,
-                                                                         context: context)]
+                                                                     context: subject.container.viewContext)]
         do {
             _ = try await subject.create([TestData.podcast])
         } catch {
@@ -147,7 +145,7 @@ extension PodcastTests {
     )
     func closureCreateThrowsWhenBatchInsertFails() async throws {
         coreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
-                                                                   context: context)
+                                                                   context: subject.container.viewContext)
         coreData.errorToThrowForBatchInsert = TestData.Error.generic
         do {
             try await withCheckedThrowingContinuation { continuation in
@@ -164,7 +162,7 @@ extension PodcastTests {
     )
     func closureCreateDoesNotThrowWhenCreatePodcastsSucceeds() async throws {
         coreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast,
-                                                                     context: context)]
+                                                                     context: subject.container.viewContext)]
         do {
             try await withCheckedThrowingContinuation { continuation in
                 subject.create([TestData.podcast]) { continuation.resume(with: $0)}
@@ -227,7 +225,7 @@ extension PodcastTests {
     )
     func combineCreateThrowsWhenBatchInsertFails() async throws {
         coreData.dataToReturnForFetchObject = PodcastStorageObject(podcast: TestData.podcast,
-                                                                   context: context)
+                                                                   context: subject.container.viewContext)
         coreData.errorToThrowForBatchInsert = TestData.Error.generic
         do {
             try await withCheckedThrowingContinuation { continuation in
@@ -252,7 +250,7 @@ extension PodcastTests {
     )
     func combineCreateDoesNotThrowWhenCreatePodcastsSucceeds() async throws {
         coreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast,
-                                                                     context: context)]
+                                                                     context: subject.container.viewContext)]
         do {
             try await withCheckedThrowingContinuation { continuation in
                 subject.createPublisher([TestData.podcast])

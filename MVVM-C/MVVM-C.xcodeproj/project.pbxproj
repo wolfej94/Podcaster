@@ -166,7 +166,6 @@
 			mainGroup = 6804C7632CFDEEDF00C4FC68;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				68979A592D00831E00413185 /* XCLocalSwiftPackageReference "../Repository" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6804C76D2CFDEEDF00C4FC68 /* Products */;
@@ -615,13 +614,6 @@
 			defaultConfigurationName = Live;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		68979A592D00831E00413185 /* XCLocalSwiftPackageReference "../Repository" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Repository;
-		};
-/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		68979A5A2D00831E00413185 /* Repository */ = {
