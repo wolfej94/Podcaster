@@ -8,14 +8,21 @@ import PodcastIndexKit
 
 public protocol DataRepository {
     func popular(ignoreCache: Bool) async throws -> [PodcastViewModel]
+    func episodes(forPodcast: PodcastViewModel, ignoreCache: Bool) async throws -> [EpisodeViewModel]
     func search(query: String) async throws -> [PodcastViewModel]
     func download(episode: EpisodeViewModel) async throws
-    func popular(ignoreCache: Bool, completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
+    func popular(ignoreCache: Bool,
+                 completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
+    func episodes(forPodcast: PodcastViewModel,
+                  ignoreCache: Bool,
+                  completionHandler: @escaping @Sendable (Result<[EpisodeViewModel], Error>) -> Void)
     func search(query: String,
                 completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
     func download(episode: EpisodeViewModel,
                   completionHandler: @escaping @Sendable (Result<Void, Error>) -> Void)
     func popularPublisher(ignoreCache: Bool) -> AnyPublisher<[PodcastViewModel], Error>
+    func episodesPublisher(forPodcast: PodcastViewModel,
+                           ignoreCache: Bool) -> AnyPublisher<[EpisodeViewModel], Error>
     func searchPublisher(query: String) -> AnyPublisher<[PodcastViewModel], Error>
     func downloadPublisher(episode: EpisodeViewModel) -> AnyPublisher<Void, Error>
 }
