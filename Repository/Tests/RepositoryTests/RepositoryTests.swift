@@ -28,7 +28,7 @@ extension RepositoryTests {
     func asyncPopularPodcastsThrowsWhenNetworkFailsToFetchTrendingPodcasts() async throws {
         network.errorToThrowFromTrendingPodcasts = TestData.Error.generic
         do {
-            _ = try await repository.popular()
+            _ = try await repository.popular(ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(network.trendingPodcastsCalled)
@@ -41,7 +41,7 @@ extension RepositoryTests {
         network.errorToThrowFromEpisodes = TestData.Error.generic
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
-            _ = try await repository.popular()
+            _ = try await repository.popular(ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(network.episodesCalled)
@@ -54,7 +54,7 @@ extension RepositoryTests {
         storage.errorToThrowFromCreatePodcasts = TestData.Error.generic
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
-            _ = try await repository.popular()
+            _ = try await repository.popular(ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(storage.createPodcastsCalled)
@@ -67,7 +67,7 @@ extension RepositoryTests {
         storage.errorToThrowFromCreateEpisodes = TestData.Error.generic
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
-            _ = try await repository.popular()
+            _ = try await repository.popular(ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(storage.createEpisodesCalled)
@@ -79,7 +79,7 @@ extension RepositoryTests {
     func asyncPopularPodcastsThrowsWhenStorageFailsToReadPodcasts() async throws {
         storage.errorToThrowFromRead = TestData.Error.generic
         do {
-            _ = try await repository.popular()
+            _ = try await repository.popular(ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(storage.readCalled)
@@ -92,7 +92,7 @@ extension RepositoryTests {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         network.dataToReturnFromEpisodes = [TestData.episode]
         storage.dataToReturnFromRead = [TestData.podcastViewModel]
-        let results = try await repository.popular()
+        let results = try await repository.popular(ignoreCache: true)
         #expect(results == [TestData.podcastViewModel])
         #expect(network.trendingPodcastsCalled)
     }
@@ -168,7 +168,7 @@ extension RepositoryTests {
         network.errorToThrowFromTrendingPodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular { continuation.resume(with: $0) }
+                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -183,7 +183,7 @@ extension RepositoryTests {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular { continuation.resume(with: $0) }
+                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -197,7 +197,7 @@ extension RepositoryTests {
         storage.errorToThrowFromCreatePodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular { continuation.resume(with: $0) }
+                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -212,7 +212,7 @@ extension RepositoryTests {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular { continuation.resume(with: $0) }
+                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -226,7 +226,7 @@ extension RepositoryTests {
         storage.errorToThrowFromRead = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular { continuation.resume(with: $0) }
+                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -241,7 +241,7 @@ extension RepositoryTests {
         network.dataToReturnFromEpisodes = [TestData.episode]
         storage.dataToReturnFromRead = [TestData.podcastViewModel]
         let results = try await withCheckedThrowingContinuation { continuation in
-            repository.popular() { continuation.resume(with: $0) }
+            repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
         }
         #expect(results == [TestData.podcastViewModel])
         #expect(network.trendingPodcastsCalled)
@@ -330,7 +330,7 @@ extension RepositoryTests {
         network.errorToThrowFromTrendingPodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher()
+                repository.popularPublisher(ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -353,7 +353,7 @@ extension RepositoryTests {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher()
+                repository.popularPublisher(ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -375,7 +375,7 @@ extension RepositoryTests {
         storage.errorToThrowFromCreatePodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher()
+                repository.popularPublisher(ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -398,7 +398,7 @@ extension RepositoryTests {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher()
+                repository.popularPublisher(ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -420,7 +420,7 @@ extension RepositoryTests {
         storage.errorToThrowFromRead = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher()
+                repository.popularPublisher(ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -443,7 +443,7 @@ extension RepositoryTests {
         network.dataToReturnFromEpisodes = [TestData.episode]
         storage.dataToReturnFromRead = [TestData.podcastViewModel]
         let results = try await withCheckedThrowingContinuation { continuation in
-            repository.popularPublisher()
+            repository.popularPublisher(ignoreCache: true)
                 .sink(receiveCompletion: { completion in
                     if case .failure(let error) = completion {
                         continuation.resume(throwing: error)
