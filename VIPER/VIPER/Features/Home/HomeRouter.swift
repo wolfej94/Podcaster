@@ -7,8 +7,10 @@
 
 
 import UIKit
+import Storage
 
 protocol HomeRouterProtocol: AnyObject {
+    func navigateToPodcastDetails(_ podcast: PodcastViewModel)
 }
 
 final class HomeRouter: HomeRouterProtocol {
@@ -28,5 +30,10 @@ final class HomeRouter: HomeRouterProtocol {
         presenter.router = router
 
         return view
+    }
+
+    func navigateToPodcastDetails(_ podcast: PodcastViewModel) {
+        // TODO: - Navigation
+        print("Navigating to \(podcast.title ?? "unnamed podcast")")
     }
 }
