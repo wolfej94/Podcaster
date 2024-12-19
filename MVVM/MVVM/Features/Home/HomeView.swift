@@ -27,8 +27,8 @@ struct HomeView: View {
             Color.black
                 .ignoresSafeArea()
         }
-        .task {
-            await viewModel.refreshPodcasts(ignoreCache: true)
+        .onAppear {
+            viewModel.refreshPodcasts(ignoreCache: true)
         }
     }
 
