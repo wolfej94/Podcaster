@@ -25,11 +25,13 @@ import SwiftUI
     ///   - state: The new state to set.
     ///   - animation: The animation to use when setting the state. Default is `.default`.
     func setState(to state: UIState, animation: Animation = .default) {
-        withAnimation(animation) {
-            self.state = state
-            if case .error = state {
-                DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(2)) { [weak self] in
-                    self?.setState(to: .loaded)
+        DispatchQueue.main.async {
+            withAnimation(animation) {
+                self.state = state
+                if case .error = state {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(2)) { [weak self] in
+                        self?.setState(to: .loaded)
+                    }
                 }
             }
         }
