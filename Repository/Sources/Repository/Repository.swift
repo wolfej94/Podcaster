@@ -33,7 +33,8 @@ internal extension PodcastViewModel {
                   title: webObject.title,
                   image: URL(string: webObject.image ?? ""),
                   podcastDescription: webObject.podcastDescription,
-                  feed: webObject.url
+                  feed: webObject.url,
+                  explicit: webObject.explicit == true
         )
     }
 }

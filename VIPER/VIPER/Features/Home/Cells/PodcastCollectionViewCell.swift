@@ -23,7 +23,7 @@ class PodcastCollectionViewCell: UICollectionViewCell {
         podcastImageView.kf.setImage(with: podcast.image)
         podcastTitleLabel.text = podcast.title
         podcastDescriptionLabel.text = podcast.podcastDescription
-        explicitContentIndicatorView.isHidden = !podcast.episodes.contains { $0.explicitContent }
+        explicitContentIndicatorView.isHidden = !podcast.explicit
     }
 
 }

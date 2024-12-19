@@ -38,6 +38,7 @@ struct HomeView: View {
                 .font(.largeTitle)
                 .foregroundStyle(Color.white)
                 .padding(.horizontal, 20)
+                .padding(.top, 40)
             VStack(alignment: .leading, spacing: 10) {
                 Button(
                     action: {},
@@ -49,7 +50,7 @@ struct HomeView: View {
                         .foregroundStyle(Color.white)
                     }
                 )
-                .padding(.horizontal, 20)
+                .padding([.horizontal], 20)
                 collectionView
             }
 
@@ -58,7 +59,7 @@ struct HomeView: View {
 
     var collectionView: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 10) {
+            LazyHStack(spacing: 20) {
                 ForEach(viewModel.podcasts) { podcast in
                     PodcastCell(podcast: podcast)
                         .frame(width: 200, height: 300)
@@ -66,6 +67,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, 20)
         }
+        .scrollTargetBehavior(.paging)
         .frame(height: 300)
     }
 

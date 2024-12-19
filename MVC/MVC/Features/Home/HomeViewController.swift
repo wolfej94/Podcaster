@@ -72,6 +72,7 @@ final class HomeViewController: UIViewController {
                 switch result {
                 case .success(let podcasts):
                     self?.podcasts = podcasts
+                    self?.hideLoading()
                     self?.popularShowsCollectionView.reloadData()
                 case .failure:
                     self?.showError("Could not update podcasts")

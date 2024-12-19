@@ -15,6 +15,7 @@ public struct PodcastViewModel: WebObject {
     public let image: URL?
     public let feed: String?
     public let podcastDescription: String?
+    public let explicit: Bool
 
     internal init(from podcast: PodcastStorageObject) {
         self.id = podcast.id
@@ -22,14 +23,16 @@ public struct PodcastViewModel: WebObject {
         self.image = podcast.image
         self.feed = podcast.feed
         self.podcastDescription = podcast.podcastDescription
+        self.explicit = podcast.explicit
     }
 
-    public init(id: Int64, title: String?, image: URL?, podcastDescription: String?, feed: String?) {
+    public init(id: Int64, title: String?, image: URL?, podcastDescription: String?, feed: String?, explicit: Bool) {
         self.id = id
         self.title = title
         self.image = image
         self.feed = feed
         self.podcastDescription = podcastDescription
+        self.explicit = explicit
     }
 
 }

@@ -16,6 +16,7 @@ internal class PodcastStorageObject: NSManagedObject, @unchecked Sendable {
     @NSManaged public var podcastDescription: String?
     @NSManaged public var title: String?
     @NSManaged public var feed: String?
+    @NSManaged public var explicit: Bool
     @NSManaged public var episodes: NSSet?
 
     convenience init(podcast:PodcastViewModel, context: NSManagedObjectContext) {
@@ -26,6 +27,7 @@ internal class PodcastStorageObject: NSManagedObject, @unchecked Sendable {
         self.image = podcast.image
         self.feed = podcast.feed
         self.podcastDescription = podcast.podcastDescription
+        self.explicit = podcast.explicit
     }
 }
 
