@@ -7,15 +7,15 @@ import Foundation
 import PodcastIndexKit
 
 public protocol DataRepository {
-    func popular() async throws -> [PodcastViewModel]
+    func popular(ignoreCache: Bool) async throws -> [PodcastViewModel]
     func search(query: String) async throws -> [PodcastViewModel]
     func download(episode: EpisodeViewModel) async throws
-    func popular(completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
+    func popular(ignoreCache: Bool, completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
     func search(query: String,
                 completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
     func download(episode: EpisodeViewModel,
                   completionHandler: @escaping @Sendable (Result<Void, Error>) -> Void)
-    func popularPublisher() -> AnyPublisher<[PodcastViewModel], Error>
+    func popularPublisher(ignoreCache: Bool) -> AnyPublisher<[PodcastViewModel], Error>
     func searchPublisher(query: String) -> AnyPublisher<[PodcastViewModel], Error>
     func downloadPublisher(episode: EpisodeViewModel) -> AnyPublisher<Void, Error>
 }
@@ -66,9 +66,13 @@ public final class Repository: DataRepository, @unchecked Sendable {
 
 // MARK: - Async/Await Methods
 extension Repository {
-    public func popular() async throws -> [PodcastViewModel] {
-        let webObjects = try await network.trendingPodcasts()
-        return try await mapToStorage(webObjects: webObjects)
+    public func popular(ignoreCache: Bool) async throws -> [PodcastViewModel] {
+        if ignoreCache {
+            let webObjects = try await network.trendingPodcasts()
+            return try await mapToStorage(webObjects: webObjects)
+        } else {
+            return try storage.read()
+        }
     }
 
     public func search(query: String) async throws -> [PodcastViewModel] {
@@ -115,11 +119,11 @@ extension Repository {
 // MARK: - Closure Methods
 public extension Repository {
     
-    func popular(completionHandler: @escaping @Sendable (Result<[PodcastViewModel], any Error>) -> Void) {
+    func popular(ignoreCache: Bool, completionHandler: @escaping @Sendable (Result<[PodcastViewModel], any Error>) -> Void) {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let podcasts = try await self.popular()
+                let podcasts = try await self.popular(ignoreCache: ignoreCache)
                 completionHandler(.success(podcasts))
             } catch {
                 completionHandler(.failure(error))
@@ -153,11 +157,11 @@ public extension Repository {
 
 // MARK: - Combine Publisher Methods
 public extension Repository {
-    func popularPublisher() -> AnyPublisher<[PodcastViewModel], any Error> {
+    func popularPublisher(ignoreCache: Bool) -> AnyPublisher<[PodcastViewModel], any Error> {
         return Future<[PodcastViewModel], any Error> { [weak self] promise in
             guard let self else { return }
             let wrapper = FutureResultWrapper(promise)
-            self.popular(completionHandler: { result in
+            self.popular(ignoreCache: ignoreCache, completionHandler: { result in
                 Task.detached {
                     wrapper.completionResult(result)
                 }
