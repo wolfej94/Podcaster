@@ -15,7 +15,11 @@ struct HomeCoordinator: View {
     }
 
     private func handleHomeAction(_ action: HomeViewAction) {
-
+        switch action {
+        case .selected(let podcast):
+            // TODO: - Navigation
+            print("Navigating to \(podcast.title ?? "unnamed podcast")")
+        }
     }
 
 }
