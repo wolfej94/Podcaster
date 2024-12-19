@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68979A552D00830100413185 /* Repository in Frameworks */ = {isa = PBXBuildFile; productRef = 68979A542D00830100413185 /* Repository */; };
+		68B20FE82D14309400219930 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 68B20FE72D14309400219930 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68B20FE82D14309400219930 /* Kingfisher in Frameworks */,
 				68979A552D00830100413185 /* Repository in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,6 +111,7 @@
 			name = MVC;
 			packageProductDependencies = (
 				68979A542D00830100413185 /* Repository */,
+				68B20FE72D14309400219930 /* Kingfisher */,
 			);
 			productName = MVC;
 			productReference = 681D21102CFFE05A001B8352 /* MVC.app */;
@@ -167,6 +170,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				68979A532D00830100413185 /* XCLocalSwiftPackageReference "../Repository" */,
+				68B20FE62D14309400219930 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 681D21112CFFE05A001B8352 /* Products */;
@@ -605,10 +609,26 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		68B20FE62D14309400219930 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		68979A542D00830100413185 /* Repository */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Repository;
+		};
+		68B20FE72D14309400219930 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68B20FE62D14309400219930 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
