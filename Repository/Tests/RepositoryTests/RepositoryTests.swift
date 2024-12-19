@@ -36,12 +36,11 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test async popular podcasts throws when network fails to fetch episodes")
-    func asyncPopularPodcastsThrowsWhenNetworkFailsToFetchEpisodes() async throws {
+    @Test("Test async episodes throws when network fails to fetch episodes")
+    func asyncEpisodesThrowsWhenNetworkFailsToFetchEpisodes() async throws {
         network.errorToThrowFromEpisodes = TestData.Error.generic
-        network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
-            _ = try await repository.popular(ignoreCache: true)
+            _ = try await repository.episodes(forPodcast: TestData.podcastViewModel, ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(network.episodesCalled)
@@ -62,12 +61,11 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test async popular podcasts throws when storage fails to create episodes")
-    func asyncPopularPodcastsThrowsWhenStorageFailsToCreateEpisodes() async throws {
+    @Test("Test async episodes throws when storage fails to create episodes")
+    func asyncEpisodesThrowsWhenStorageFailsToCreateEpisodes() async throws {
         storage.errorToThrowFromCreateEpisodes = TestData.Error.generic
-        network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
-            _ = try await repository.popular(ignoreCache: true)
+            _ = try await repository.episodes(forPodcast: TestData.podcastViewModel, ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(storage.createEpisodesCalled)
@@ -77,12 +75,12 @@ extension RepositoryTests {
 
     @Test("Test async popular podcasts throws when storage fails to read podcasts")
     func asyncPopularPodcastsThrowsWhenStorageFailsToReadPodcasts() async throws {
-        storage.errorToThrowFromRead = TestData.Error.generic
+        storage.errorToThrowFromReadPodcasts = TestData.Error.generic
         do {
             _ = try await repository.popular(ignoreCache: true)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
-            #expect(storage.readCalled)
+            #expect(storage.readPodcastsCalled)
             #expect(error == .generic)
         }
     }
@@ -91,21 +89,34 @@ extension RepositoryTests {
     func asyncPopularPodcastsReturnsCorrectDataWhenEverythingIsSuccessful() async throws {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         network.dataToReturnFromEpisodes = [TestData.episode]
-        storage.dataToReturnFromRead = [TestData.podcastViewModel]
+        storage.dataToReturnFromReadPodcasts = [TestData.podcastViewModel]
         let results = try await repository.popular(ignoreCache: true)
         #expect(results == [TestData.podcastViewModel])
         #expect(network.trendingPodcastsCalled)
     }
 
-    @Test("Test async popular podcasts throws when network fails to fetch trending podcasts when reading from cache")
-    func asyncPopularPodcastsThrowsWhenNetworkFailsToFetchTrendingPodcastsWhenReadingFromCache() async throws {
-        storage.errorToThrowFromRead = TestData.Error.generic
+    @Test("Test async popular podcasts throws when storage fails to read from cache")
+    func asyncPopularPodcastsThrowsWhenStorageFailsToReadFromCache() async throws {
+        storage.errorToThrowFromReadPodcasts = TestData.Error.generic
         do {
             _ = try await repository.popular(ignoreCache: false)
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(network.trendingPodcastsCalled == false)
-            #expect(storage.readCalled)
+            #expect(storage.readPodcastsCalled)
+            #expect(error == .generic)
+        }
+    }
+
+    @Test("Test async episodes throws when storage fails to read from cache")
+    func asyncEpisodesThrowsWhenStorageFailsToReadFromCache() async throws {
+        storage.errorToThrowFromReadEpisodes = TestData.Error.generic
+        do {
+            _ = try await repository.episodes(forPodcast: TestData.podcastViewModel, ignoreCache: false)
+            Issue.record("Error should throw")
+        } catch let error as TestData.Error {
+            #expect(network.episodesCalled == false)
+            #expect(storage.readEpisodesCalled)
             #expect(error == .generic)
         }
     }
@@ -122,34 +133,20 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test async create podcasts episodes are empty if podcast url is nil")
-    func asyncSearchPodcastsEpisodesAreEmptyIfPodcastURLIsNil() async throws {
-        network.dataToReturnFromSearch = [TestData.podcastWithNoURL]
+    @Test("Test async episodes are empty if podcast url is nil")
+    func asyncEpisodesAreEmptyIfPodcastURLIsNil() async throws {
         network.dataToReturnFromEpisodes = [TestData.episode]
-        let results = try await repository.search(query: TestData.searchTerm)
-        #expect(results.first?.episodes.count == .zero)
-        #expect(network.searchCalled)
-    }
-
-    @Test("Test async create podcasts throws when network fails to fetch episodes")
-    func asyncSearchPodcastsThrowsWhenNetworkFailsToFetchEpisodes() async throws {
-        network.errorToThrowFromEpisodes = TestData.Error.generic
-        network.dataToReturnFromSearch = [TestData.podcast]
-        do {
-            _ = try await repository.search(query: TestData.searchTerm)
-            Issue.record("Error should throw")
-        } catch let error as TestData.Error {
-            #expect(network.episodesCalled)
-            #expect(error == .generic)
-        }
+        let results = try await repository
+            .episodes(forPodcast: PodcastViewModel(from: TestData.podcastWithNoURL), ignoreCache: true)
+        #expect(results.count == .zero)
+        #expect(network.episodesCalled == false)
     }
 
     @Test("Test async search podcasts returns correct data when everything is successful")
     func asyncSearchPodcastsReturnsCorrectDataWhenEverythingIsSuccessful() async throws {
         network.dataToReturnFromSearch = [TestData.podcast]
-        network.dataToReturnFromEpisodes = [TestData.episode]
         let results = try await repository.search(query: TestData.searchTerm)
-        #expect(results == [PodcastViewModel(from: TestData.podcast, withEpisodes: [TestData.episode])])
+        #expect(results == [PodcastViewModel(from: TestData.podcast)])
         #expect(network.searchCalled)
     }
 
@@ -190,9 +187,9 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test closure popular podcasts throws when network fails to fetch trending podcasts when reading from cache")
-    func closurePopularPodcastsThrowsWhenNetworkFailsToFetchTrendingPodcastsWhenReadingFromCache() async throws {
-        storage.errorToThrowFromRead = TestData.Error.generic
+    @Test("Test closure popular podcasts throws when storage fails to read from cache")
+    func closurePopularPodcastsThrowsWhenStorageFailsToReadFromCache() async throws {
+        storage.errorToThrowFromReadPodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
                 repository.popular(ignoreCache: false) { continuation.resume(with: $0) }
@@ -200,18 +197,35 @@ extension RepositoryTests {
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(network.trendingPodcastsCalled == false)
-            #expect(storage.readCalled)
+            #expect(storage.readPodcastsCalled)
             #expect(error == .generic)
         }
     }
 
-    @Test("Test closure popular podcasts throws when network fails to fetch episodes")
+    @Test("Test closure episodes throws when storage fails to read from cache")
+    func closureEpisodesThrowsWhenStorageFailsToReadFromCache() async throws {
+        storage.errorToThrowFromReadEpisodes = TestData.Error.generic
+        do {
+            _ = try await withCheckedThrowingContinuation { continuation in
+                repository.episodes(forPodcast: TestData.podcastViewModel, ignoreCache: false) { continuation.resume(with: $0) }
+            }
+            Issue.record("Error should throw")
+        } catch let error as TestData.Error {
+            #expect(network.episodesCalled == false)
+            #expect(storage.readEpisodesCalled)
+            #expect(error == .generic)
+        }
+    }
+
+    @Test("Test closure episodes throws when network fails to fetch episodes")
     func closurePopularPodcastsThrowsWhenNetworkFailsToFetchEpisodes() async throws {
         network.errorToThrowFromEpisodes = TestData.Error.generic
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
+                repository.episodes(forPodcast: TestData.podcastViewModel, ignoreCache: true) {
+                    continuation.resume(with: $0)
+                }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -234,13 +248,12 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test closure popular podcasts throws when storage fails to create episodes")
+    @Test("Test closure episodes throws when storage fails to create episodes")
     func closurePopularPodcastsThrowsWhenStorageFailsToCreateEpisodes() async throws {
         storage.errorToThrowFromCreateEpisodes = TestData.Error.generic
-        network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
+                repository.episodes(forPodcast: TestData.podcastViewModel, ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
@@ -251,14 +264,14 @@ extension RepositoryTests {
 
     @Test("Test closure popular podcasts throws when storage fails to read podcasts")
     func closurePopularPodcastsThrowsWhenStorageFailsToReadPodcasts() async throws {
-        storage.errorToThrowFromRead = TestData.Error.generic
+        storage.errorToThrowFromReadPodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
                 repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
-            #expect(storage.readCalled)
+            #expect(storage.readPodcastsCalled)
             #expect(error == .generic)
         }
     }
@@ -266,8 +279,7 @@ extension RepositoryTests {
     @Test("Test closure popular podcasts returns correct data when everything is successful")
     func closurePopularPodcastsReturnsCorrectDataWhenEverythingIsSuccessful() async throws {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
-        network.dataToReturnFromEpisodes = [TestData.episode]
-        storage.dataToReturnFromRead = [TestData.podcastViewModel]
+        storage.dataToReturnFromReadPodcasts = [TestData.podcastViewModel]
         let results = try await withCheckedThrowingContinuation { continuation in
             repository.popular(ignoreCache: true) { continuation.resume(with: $0) }
         }
@@ -289,40 +301,26 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test closure create podcasts episodes are empty if podcast url is nil")
-    func closureSearchPodcastsEpisodesAreEmptyIfPodcastURLIsNil() async throws {
-        network.dataToReturnFromSearch = [TestData.podcastWithNoURL]
+    @Test("Test closure episodes are empty if podcast url is nil")
+    func closureEpisodesAreEmptyIfPodcastURLIsNil() async throws {
         network.dataToReturnFromEpisodes = [TestData.episode]
         let results = try await withCheckedThrowingContinuation { continuation in
-            repository.search(query: TestData.searchTerm) { continuation.resume(with: $0) }
-        }
-        #expect(results.first?.episodes.count == .zero)
-        #expect(network.searchCalled)
-    }
-
-    @Test("Test closure create podcasts throws when network fails to fetch episodes")
-    func closureSearchPodcastsThrowsWhenNetworkFailsToFetchEpisodes() async throws {
-        network.errorToThrowFromEpisodes = TestData.Error.generic
-        network.dataToReturnFromSearch = [TestData.podcast]
-        do {
-            _ = try await withCheckedThrowingContinuation { continuation in
-                repository.search(query: TestData.searchTerm) { continuation.resume(with: $0) }
+            repository.episodes(forPodcast: PodcastViewModel(from: TestData.podcastWithNoURL),
+                                ignoreCache: true) {
+                continuation.resume(with: $0)
             }
-            Issue.record("Error should throw")
-        } catch let error as TestData.Error {
-            #expect(network.episodesCalled)
-            #expect(error == .generic)
         }
+        #expect(results.count == .zero)
+        #expect(network.episodesCalled == false)
     }
 
     @Test("Test closure search podcasts returns correct data when everything is successful")
     func closureSearchPodcastsReturnsCorrectDataWhenEverythingIsSuccessful() async throws {
         network.dataToReturnFromSearch = [TestData.podcast]
-        network.dataToReturnFromEpisodes = [TestData.episode]
         let results = try await withCheckedThrowingContinuation { continuation in
             repository.search(query: TestData.searchTerm) { continuation.resume(with: $0) }
         }
-        #expect(results == [PodcastViewModel(from: TestData.podcast, withEpisodes: [TestData.episode])])
+        #expect(results == [PodcastViewModel(from: TestData.podcast)])
         #expect(network.searchCalled)
     }
 
@@ -375,9 +373,9 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test combine popular podcasts throws when network fails to fetch trending podcasts when reading from cache")
-    func combinePopularPodcastsThrowsWhenNetworkFailsToFetchTrendingPodcastsWhenReadingFromCache() async throws {
-        storage.errorToThrowFromRead = TestData.Error.generic
+    @Test("Test combine popular podcasts throws when storage fails to read from cache")
+    func combinePopularPodcastsThrowsWhenStorageFailsToReadFromCache() async throws {
+        storage.errorToThrowFromReadPodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
                 repository.popularPublisher(ignoreCache: false)
@@ -393,18 +391,40 @@ extension RepositoryTests {
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
             #expect(network.trendingPodcastsCalled == false)
-            #expect(storage.readCalled)
+            #expect(storage.readPodcastsCalled)
             #expect(error == .generic)
         }
     }
 
-    @Test("Test combine popular podcasts throws when network fails to fetch episodes")
-    func combinePopularPodcastsThrowsWhenNetworkFailsToFetchEpisodes() async throws {
-        network.errorToThrowFromEpisodes = TestData.Error.generic
-        network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
+    @Test("Test combine episodes throws when storage fails to read from cache")
+    func combineEpisodesThrowsWhenStorageFailsToReadFromCache() async throws {
+        storage.errorToThrowFromReadEpisodes = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher(ignoreCache: true)
+                repository.episodesPublisher(forPodcast: TestData.podcastViewModel, ignoreCache: false)
+                    .sink(receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            continuation.resume(throwing: error)
+                        }
+                    }, receiveValue: { value in
+                        continuation.resume(returning: value)
+                    })
+                    .store(in: &cancellables)
+            }
+            Issue.record("Error should throw")
+        } catch let error as TestData.Error {
+            #expect(network.episodesCalled == false)
+            #expect(storage.readEpisodesCalled)
+            #expect(error == .generic)
+        }
+    }
+
+    @Test("Test combine episodes throws when network fails to fetch episodes")
+    func combineEpisodesThrowsWhenNetworkFailsToFetchEpisodes() async throws {
+        network.errorToThrowFromEpisodes = TestData.Error.generic
+        do {
+            _ = try await withCheckedThrowingContinuation { continuation in
+                repository.episodesPublisher(forPodcast: TestData.podcastViewModel, ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -443,13 +463,13 @@ extension RepositoryTests {
         }
     }
 
-    @Test("Test combine popular podcasts throws when storage fails to create episodes")
-    func combinePopularPodcastsThrowsWhenStorageFailsToCreateEpisodes() async throws {
+    @Test("Test combine episodes throws when storage fails to create episodes")
+    func combineEpisodesThrowsWhenStorageFailsToCreateEpisodes() async throws {
         storage.errorToThrowFromCreateEpisodes = TestData.Error.generic
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
-                repository.popularPublisher(ignoreCache: true)
+                repository.episodesPublisher(forPodcast: TestData.podcastViewModel, ignoreCache: true)
                     .sink(receiveCompletion: { completion in
                         if case .failure(let error) = completion {
                             continuation.resume(throwing: error)
@@ -468,7 +488,7 @@ extension RepositoryTests {
 
     @Test("Test combine popular podcasts throws when storage fails to read podcasts")
     func combinePopularPodcastsThrowsWhenStorageFailsToReadPodcasts() async throws {
-        storage.errorToThrowFromRead = TestData.Error.generic
+        storage.errorToThrowFromReadPodcasts = TestData.Error.generic
         do {
             _ = try await withCheckedThrowingContinuation { continuation in
                 repository.popularPublisher(ignoreCache: true)
@@ -483,7 +503,7 @@ extension RepositoryTests {
             }
             Issue.record("Error should throw")
         } catch let error as TestData.Error {
-            #expect(storage.readCalled)
+            #expect(storage.readPodcastsCalled)
             #expect(error == .generic)
         }
     }
@@ -491,8 +511,7 @@ extension RepositoryTests {
     @Test("Test combine popular podcasts returns correct data when everything is successful")
     func combinePopularPodcastsReturnsCorrectDataWhenEverythingIsSuccessful() async throws {
         network.dataToReturnFromTrendingPodcasts = [TestData.podcast]
-        network.dataToReturnFromEpisodes = [TestData.episode]
-        storage.dataToReturnFromRead = [TestData.podcastViewModel]
+        storage.dataToReturnFromReadPodcasts = [TestData.podcastViewModel]
         let results = try await withCheckedThrowingContinuation { continuation in
             repository.popularPublisher(ignoreCache: true)
                 .sink(receiveCompletion: { completion in
@@ -532,10 +551,9 @@ extension RepositoryTests {
 
     @Test("Test combine create podcasts episodes are empty if podcast url is nil")
     func combineSearchPodcastsEpisodesAreEmptyIfPodcastURLIsNil() async throws {
-        network.dataToReturnFromSearch = [TestData.podcastWithNoURL]
         network.dataToReturnFromEpisodes = [TestData.episode]
         let results = try await withCheckedThrowingContinuation { continuation in
-            repository.searchPublisher(query: TestData.searchTerm)
+            repository.episodesPublisher(forPodcast: PodcastViewModel(from: TestData.podcastWithNoURL), ignoreCache: true)
                 .sink(receiveCompletion: { completion in
                     if case .failure(let error) = completion {
                         continuation.resume(throwing: error)
@@ -545,30 +563,8 @@ extension RepositoryTests {
                 })
                 .store(in: &cancellables)
         }
-        #expect(results.first?.episodes.count == .zero)
-        #expect(network.searchCalled)
-    }
-
-    @Test("Test combine create podcasts throws when network fails to fetch episodes")
-    func combineSearchPodcastsThrowsWhenNetworkFailsToFetchEpisodes() async throws {
-        network.errorToThrowFromEpisodes = TestData.Error.generic
-        network.dataToReturnFromSearch = [TestData.podcast]
-        do {
-            _ = try await withCheckedThrowingContinuation { continuation in
-                repository.searchPublisher(query: TestData.searchTerm).sink(receiveCompletion: { completion in
-                    if case .failure(let error) = completion {
-                        continuation.resume(throwing: error)
-                    }
-                }, receiveValue: { value in
-                    continuation.resume(returning: value)
-                })
-                .store(in: &cancellables)
-            }
-            Issue.record("Error should throw")
-        } catch let error as TestData.Error {
-            #expect(network.episodesCalled)
-            #expect(error == .generic)
-        }
+        #expect(results.count == .zero)
+        #expect(network.episodesCalled == false)
     }
 
     @Test("Test combine search podcasts returns correct data when everything is successful")
@@ -586,7 +582,7 @@ extension RepositoryTests {
                 })
                 .store(in: &cancellables)
         }
-        #expect(results == [PodcastViewModel(from: TestData.podcast, withEpisodes: [TestData.episode])])
+        #expect(results == [PodcastViewModel(from: TestData.podcast)])
         #expect(network.searchCalled)
     }
 
@@ -754,7 +750,7 @@ extension RepositoryTests {
             chash: nil,
             value: nil,
             funding: nil)
-        static let podcastViewModel = PodcastViewModel(from: podcast, withEpisodes: [episode])
+        static let podcastViewModel = PodcastViewModel(from: podcast)
         static let searchTerm = "Test"
         enum Error: LocalizedError {
             case generic

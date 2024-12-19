@@ -15,6 +15,7 @@ internal class PodcastStorageObject: NSManagedObject, @unchecked Sendable {
     @NSManaged public var image: URL?
     @NSManaged public var podcastDescription: String?
     @NSManaged public var title: String?
+    @NSManaged public var feed: String?
     @NSManaged public var episodes: NSSet?
 
     convenience init(podcast:PodcastViewModel, context: NSManagedObjectContext) {
@@ -23,12 +24,8 @@ internal class PodcastStorageObject: NSManagedObject, @unchecked Sendable {
         self.id = podcast.id
         self.title = podcast.title
         self.image = podcast.image
+        self.feed = podcast.feed
         self.podcastDescription = podcast.podcastDescription
-        podcast.episodes.forEach {
-            let episode = EpisodeStorageObject(episode: $0, context: context)
-            episode.podcast = self
-            self.addToEpisodes(episode)
-        }
     }
 }
 

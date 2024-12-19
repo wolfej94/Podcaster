@@ -10,10 +10,16 @@ import Foundation
 /// A protocol defining storage operations for podcasts and episodes.
 public protocol StorageService: Sendable {
 
-    /// Reads podcasts from storage that match the specified predicate and sort descriptors.
+    /// Reads podcasts from storage.
     /// - Returns: An array of `PodcastViewModel` objects matching the criteria.
     /// - Throws: An error if the read operation fails.
     func read() throws -> [PodcastViewModel]
+
+    /// Reads episodes from storage that match belong to the specified podcast.
+    /// - Returns: An array of `EpisodeViewModel` objects for the given podcast
+    /// - Parameter id: An idenfier for a `PodcastViewModel` object.
+    /// - Throws: An error if the read operation fails.
+    func read(forPodcastWithID id: Int64) throws -> [EpisodeViewModel]
 
     /// Asynchronously creates or updates the specified podcasts in storage.
     /// - Parameter podcasts: An array of `PodcastViewModel` objects to store.

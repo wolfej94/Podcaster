@@ -57,8 +57,25 @@ public final class DefaultStorageService: StorageService, @unchecked Sendable {
     }
 
     public func read() throws -> [PodcastViewModel] {
-        return try coreData.fetchManagedObjects(ofType: PodcastStorageObject.self, byIDs: nil, in: container.viewContext)
-            .map { PodcastViewModel(from: $0) }
+        return try coreData.fetchManagedObjects(
+            ofType: PodcastStorageObject.self,
+            byIDs: nil,
+            in: container.viewContext
+        )
+        .map { PodcastViewModel(from: $0) }
+    }
+
+    public func read(forPodcastWithID id: Int64) throws -> [EpisodeViewModel] {
+        let result = try coreData.fetchManagedObjects(
+            ofType: PodcastStorageObject.self,
+            byIDs: [id],
+            in: container.viewContext
+        )
+        .first
+
+        guard let episodes = result?.episodes?.allObjects as? [EpisodeStorageObject] else { return [] }
+        return episodes
+            .compactMap { EpisodeViewModel(from: $0) }
     }
 
 }

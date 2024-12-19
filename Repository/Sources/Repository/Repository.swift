@@ -8,12 +8,12 @@ import PodcastIndexKit
 
 public protocol DataRepository {
     func popular(ignoreCache: Bool) async throws -> [PodcastViewModel]
-    func episodes(forPodcast: PodcastViewModel, ignoreCache: Bool) async throws -> [EpisodeViewModel]
+    func episodes(forPodcast podcast: PodcastViewModel, ignoreCache: Bool) async throws -> [EpisodeViewModel]
     func search(query: String) async throws -> [PodcastViewModel]
     func download(episode: EpisodeViewModel) async throws
     func popular(ignoreCache: Bool,
                  completionHandler: @escaping @Sendable (Result<[PodcastViewModel], Error>) -> Void)
-    func episodes(forPodcast: PodcastViewModel,
+    func episodes(forPodcast podcast: PodcastViewModel,
                   ignoreCache: Bool,
                   completionHandler: @escaping @Sendable (Result<[EpisodeViewModel], Error>) -> Void)
     func search(query: String,
@@ -21,19 +21,19 @@ public protocol DataRepository {
     func download(episode: EpisodeViewModel,
                   completionHandler: @escaping @Sendable (Result<Void, Error>) -> Void)
     func popularPublisher(ignoreCache: Bool) -> AnyPublisher<[PodcastViewModel], Error>
-    func episodesPublisher(forPodcast: PodcastViewModel,
+    func episodesPublisher(forPodcast podcast: PodcastViewModel,
                            ignoreCache: Bool) -> AnyPublisher<[EpisodeViewModel], Error>
     func searchPublisher(query: String) -> AnyPublisher<[PodcastViewModel], Error>
     func downloadPublisher(episode: EpisodeViewModel) -> AnyPublisher<Void, Error>
 }
 
 internal extension PodcastViewModel {
-    init(from webObject: Podcast, withEpisodes episodes: [Episode]) {
+    init(from webObject: Podcast) {
         self.init(id: Int64(webObject.id ?? .zero),
                   title: webObject.title,
                   image: URL(string: webObject.image ?? ""),
                   podcastDescription: webObject.podcastDescription,
-                  episodes: episodes.map { .init(from: $0) }
+                  feed: webObject.url
         )
     }
 }
@@ -82,44 +82,37 @@ extension Repository {
         }
     }
 
+    public func episodes(forPodcast podcast: PodcastViewModel, ignoreCache: Bool) async throws -> [EpisodeViewModel] {
+        if ignoreCache {
+            guard let feed = podcast.feed else { return [] }
+            let episodes = try await self.network
+                .episodes(byFeedURL: feed)
+            return try await mapToStorage(webObjects: episodes, forPodcast: podcast)
+        } else {
+            return try storage.read(forPodcastWithID: podcast.id)
+        }
+    }
+
     public func search(query: String) async throws -> [PodcastViewModel] {
-        let webObjects = try await network
+        try await network
             .search(byTerm: query)
-        return try await embedEpisodes(inPodcasts: webObjects)
+            .map { PodcastViewModel(from: $0) }
     }
 
     public func download(episode: EpisodeViewModel) async throws {
         try await storage.download(episode: episode, session: URLSession.shared)
     }
 
-    private func embedEpisodes(inPodcasts podcasts: [Podcast]) async throws -> [PodcastViewModel] {
-        return try await withThrowingTaskGroup(of: PodcastViewModel.self, returning: [PodcastViewModel].self) { group in
-            for podcast in podcasts {
-                group.addTask {
-                    guard let feed = podcast.url else {
-                        return PodcastViewModel(from: podcast, withEpisodes: [])
-                    }
-                    let episodes = try await self.network
-                        .episodes(byFeedURL: feed)
-                    return PodcastViewModel(from: podcast, withEpisodes: episodes)
-                }
-            }
-
-            var podcasts = [PodcastViewModel]()
-            for try await podcast in group {
-                podcasts.append(podcast)
-            }
-            return podcasts
-        }
+    private func mapToStorage(webObjects: [Podcast]) async throws -> [PodcastViewModel] {
+        let results = webObjects.map { PodcastViewModel(from: $0) }
+        try await storage.create(results)
+        return try storage.read()
     }
 
-    private func mapToStorage(webObjects: [Podcast]) async throws -> [PodcastViewModel] {
-        let results = try await embedEpisodes(inPodcasts: webObjects)
-        try await storage.create(results)
-        for result in results {
-            try await storage.create(result.episodes, forPodcast: result)
-        }
-        return try storage.read()
+    private func mapToStorage(webObjects: [Episode], forPodcast podcast: PodcastViewModel) async throws -> [EpisodeViewModel] {
+        let result = webObjects.map { EpisodeViewModel(from: $0) }
+        try await storage.create(result, forPodcast: podcast)
+        return try storage.read(forPodcastWithID: podcast.id)
     }
 }
 
@@ -132,6 +125,20 @@ public extension Repository {
             do {
                 let podcasts = try await self.popular(ignoreCache: ignoreCache)
                 completionHandler(.success(podcasts))
+            } catch {
+                completionHandler(.failure(error))
+            }
+        }
+    }
+
+    func episodes(forPodcast podcast: PodcastViewModel,
+                  ignoreCache: Bool,
+                  completionHandler: @escaping @Sendable (Result<[EpisodeViewModel], any Error>) -> Void) {
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let episodes = try await self.episodes(forPodcast: podcast, ignoreCache: ignoreCache)
+                completionHandler(.success(episodes))
             } catch {
                 completionHandler(.failure(error))
             }
@@ -169,6 +176,19 @@ public extension Repository {
             guard let self else { return }
             let wrapper = FutureResultWrapper(promise)
             self.popular(ignoreCache: ignoreCache, completionHandler: { result in
+                Task.detached {
+                    wrapper.completionResult(result)
+                }
+            })
+        }
+        .eraseToAnyPublisher()
+    }
+
+    func episodesPublisher(forPodcast podcast: PodcastViewModel, ignoreCache: Bool) -> AnyPublisher<[EpisodeViewModel], any Error> {
+        return Future<[EpisodeViewModel], any Error> { [weak self] promise in
+            guard let self else { return }
+            let wrapper = FutureResultWrapper(promise)
+            self.episodes(forPodcast: podcast, ignoreCache: ignoreCache, completionHandler: { result in
                 Task.detached {
                     wrapper.completionResult(result)
                 }

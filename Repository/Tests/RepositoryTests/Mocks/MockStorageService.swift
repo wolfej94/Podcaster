@@ -10,13 +10,22 @@ import Combine
 
 final class MockStorageService: StorageService, @unchecked Sendable {
 
-    var readCalled = false
-    var errorToThrowFromRead: Error?
-    var dataToReturnFromRead = [PodcastViewModel]()
+    var readPodcastsCalled = false
+    var errorToThrowFromReadPodcasts: Error?
+    var dataToReturnFromReadPodcasts = [PodcastViewModel]()
     func read() throws -> [PodcastViewModel] {
-        readCalled = true
-        if let errorToThrowFromRead { throw errorToThrowFromRead }
-        return dataToReturnFromRead
+        readPodcastsCalled = true
+        if let errorToThrowFromReadPodcasts { throw errorToThrowFromReadPodcasts }
+        return dataToReturnFromReadPodcasts
+    }
+
+    var readEpisodesCalled = false
+    var errorToThrowFromReadEpisodes: Error?
+    var dataToReturnFromReadEpisodes = [EpisodeViewModel]()
+    func read(forPodcastWithID id: Int64) throws -> [Storage.EpisodeViewModel] {
+        readEpisodesCalled = true
+        if let errorToThrowFromReadEpisodes { throw errorToThrowFromReadEpisodes }
+        return dataToReturnFromReadEpisodes
     }
 
     var createPodcastsCalled = false
