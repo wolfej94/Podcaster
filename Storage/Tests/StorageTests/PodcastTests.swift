@@ -344,7 +344,7 @@ extension PodcastTests {
                                               title: "Test",
                                               image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
                                               podcastDescription: "",
-                                              episodes: []
+                                              feed: "https://test.feed"
         )
 
         // MARK: - Errors

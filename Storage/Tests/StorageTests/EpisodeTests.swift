@@ -54,7 +54,7 @@ extension EpisodesTests {
     func errorThrowsWhenFetchEpisodesFails() throws {
         mockCoreData.errorToThrowForFetchObjects = TestData.Error.generic
         do {
-            _ = try subjectUsingMockHelpers.read().first?.episodes
+            _ = try subjectUsingMockHelpers.read(forPodcastWithID: TestData.podcast.id)
             Issue.record("Fetch should throw")
         } catch let error as TestData.Error {
             #expect(error == .generic)
@@ -65,9 +65,11 @@ extension EpisodesTests {
           .tags(Tag.EpisodeTestTag.sync, Tag.EpisodeTestTag.read)
     )
     func dataReturnedThrowWhenFetchEpisodesSucceeds() throws {
-        mockCoreData.dataToReturnForFetchObjects = [PodcastStorageObject(podcast: TestData.podcast, context: context)]
-        let episodes = try subjectUsingMockHelpers.read().first?.episodes
-        #expect(episodes?.first?.id == TestData.episode.id)
+        let podcast = PodcastStorageObject(podcast: TestData.podcast, context: context)
+        podcast.addToEpisodes(EpisodeStorageObject(episode: TestData.episode, podcast: podcast, context: context))
+        mockCoreData.dataToReturnForFetchObjects = [podcast]
+        let episodes = try subjectUsingMockHelpers.read(forPodcastWithID: TestData.podcast.id)
+        #expect(episodes.first?.id == TestData.episode.id)
     }
 }
 
@@ -979,7 +981,7 @@ extension EpisodesTests {
                                               title: "",
                                               image: URL(string: "https://picsum.photos/seed/picsum/200/300")!,
                                               podcastDescription: "",
-                                              episodes: [episode]
+                                              feed: "https://test.feed"
         )
 
         static let episode = EpisodeViewModel(id: 1,
